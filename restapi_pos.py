@@ -8,7 +8,7 @@ from apiclient.discovery import build
 import dateparser
 from datetime import datetime,timedelta
 
-# db_connect = create_engine('sqlite:///chinook.db')
+
 credentials=pickle.load(open('token.pkl','rb'))
 service=build("calendar","v3",credentials=credentials)
 result=service.calendarList().list().execute()
@@ -17,19 +17,16 @@ now = datetime.utcnow().isoformat() + 'Z'
 
 app = Flask(__name__)
 api = Api(app)
-# global events_result
-# events_result=service.events().list(calendarId=calendar_id, timeMin=now,
-#                                            maxResults=500, singleEvents=True,
-#                                            orderBy='startTime').execute()
 
+# to get all the events scheduled till now
 def get_events():
-#     print(now)
     events_result = service.events().list(calendarId=calendar_id, timeMin=now,
                                                maxResults=500, singleEvents=True,
                                                orderBy='startTime').execute()
-    # print(events_result.get('items',[]))
     return events_result.get('items', [])
 
+
+# to add an event(appointment based on slot available)
 def create_event(new_event):
     if already_exists(new_event):
         return event_suggest()
@@ -38,7 +35,6 @@ def create_event(new_event):
                                                        maxResults=500, singleEvents=True,
                                                        orderBy='startTime').execute()
         events=events_result['items']
-        # events_result=events_result.get('items', [])
         event_id=""
         date=new_event['start']['dateTime']+'+05:30'
         events_result=events_result.get('items', [])
@@ -50,12 +46,12 @@ def create_event(new_event):
         else:
             return update_event(new_event,event_id)
 
+# Suggesting the user avalable slots for the appointent
 def event_suggest():
     events_result = service.events().list(calendarId=calendar_id, timeMin=now,
                                                maxResults=500, singleEvents=True,
                                                orderBy='startTime').execute()
     events=events_result['items']
-#         print(events)
     eventsforappointment=[]
     suggested_times=[]
     for event in events:
@@ -69,15 +65,16 @@ def event_suggest():
     return " Bot: Pick from the suggested timings:" +'\n'+suggested_times+ '''<form method="POST">
               Input: <input type="text" name="appoint"><br>'''+'''<input type="submit" value="Submit"><br>
               </form>'''
+
+# update the event based on the input from the user
 def update_event(newevent,event_id):
     event = service.events().get(calendarId=calendar_id,eventId=event_id).execute()
     event['summary']='Appointment'
     updated_event = service.events().update(calendarId=calendar_id, eventId=event['id'], body=event).execute()
-    # Print the updated date.
     print(updated_event['updated'])
     return "Appointmet added"
 
-
+# check if the event exist before
 def already_exists(new_event):
     events = get_date_events(new_event['start']['dateTime'],get_events())
     event_list = [new_event['summary'] for new_event in events]
@@ -86,7 +83,7 @@ def already_exists(new_event):
     else:
         return True
 
-
+# get events based on the date and time
 def get_date_events(date, events):
     lst = []
     i=0
@@ -94,13 +91,14 @@ def get_date_events(date, events):
     for event in events:
         i+=1
         if event.get('start').get('dateTime'):
-#             print(event['start']['dateTime'])
             d1 = event['start']['dateTime']
             if d1 == date:
                 lst.append(event)
     print(i)
     return lst
 
+
+# for creating new event template to add in the google calendar
 def new_eve(text):
     matches=list(datefinder.find_dates(text))
     print(matches)
@@ -132,12 +130,9 @@ def new_eve(text):
     }
     return event
 
-# print("Hi! book an Appointment")
-# text=input()
-
 @app.route('/')
 def index():
-    return "Main Page (Dashboard)"
+    return "Main Page, Go to /bot"
 
 def getfuncval():
     event=new_eve(request.form.get('appoint'))
@@ -149,12 +144,6 @@ def getfuncval():
                   </form>'''
     else:
         return create_event(event)
-    # x='You:'+ request.form.get('appoint') + '''<form method="POST">
-    #           Bot: Hi book an appointment<br>
-    #           Input: <input type="text" name="appoint"><br>
-    #           <input type="submit" value="Submit"><br>
-    #       </form>'''
-    # return x
 
 
 @app.route('/bot',methods=['POST','GET'])
@@ -167,8 +156,6 @@ def getvalue():
                   Bot: Hi!! Book an Appointment<br>
                   Input: <input type="text" name="appoint"><br>'''+'''<input type="submit" value="Submit"><br>
                   </form>'''
-
-
 
 if __name__ == '__main__':
      app.run(port=5000)
