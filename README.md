@@ -1,5 +1,12 @@
 # Appointment-bot
 
+
+
+main folder for the process is bot and events.py is used for the add,fetch calendar events..
+
+
+
+
 Pickle file is generate using below code...
 
 from apiclient.discovery import build
