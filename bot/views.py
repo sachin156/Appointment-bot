@@ -11,6 +11,8 @@ from nltk.tag import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
 
+from django.db import connection
+
 stop = stopwords.words('english')
 
 
@@ -59,6 +61,18 @@ def addappointment(request):
         if newtext.lower() in doctor:
             return redirect('doctors')
         else:
+            import datefinder
+            matches=list(datefinder.find_dates(newtext))
+            if len(matches)==0:
+                date_time=null
+            else:
+                start_time=matches[0]
+                userday=str(start_time).split(" ")[0]
+                usertime=start_time.strftime('%H:%M')
+
+            print(userday)
+            print(usertime)
+
             # load stanford libraries to identify the person
             st = StanfordNERTagger('/home/sachinv/Documents/stanford-ner/classifiers/english.all.3class.distsim.crf.ser.gz',
                                    '/home/sachinv/Documents/stanford-ner/stanford-ner.jar',encoding='utf-8')
@@ -69,30 +83,47 @@ def addappointment(request):
                     doctor=("%-12s"%tag, " ".join(w for w, t in chunk))
             doc_name=(doctor[1])
 
+            print(doc_name)
 
             doctors=Doctors.objects.all()
+            doctor_id=""
             for doc in doctors:
                 if doc_name.lower()==(doc.doc_name).lower():
                     doctor_id=doc.doc_id
                     break
                 else:
                     print("No doctor found")
-
+            flag=0
             print(doctor_id)
-            #  get booking status of the slots based on doc id
-            bookingstats = BookingStatus.objects.raw('SELECT * FROM booking_status Where doc_id=%s',doctor_id)
-            for person in bookingstats:
-                print(person)
+            cursor=connection.cursor()
+            if doctor_id!="":
+                cursor.execute("SELECT count(b.status) From booking_status b,slots s Where b.slot_id=s.slot_id and b.book_date=%s and s.slot_time=%s and doc_id=%s",[userday,usertime,doctor_id])
+                records=cursor.fetchall()
+                flag=records[0][0]
+                # SELECT count(b.status) FROM booking_status b,slots s Where b.slot_id=s.slot_id and s.slot_time=%s and b.doc_id=%s",[usertime],[doctor_id])
+            print("flag",flag)
+            if flag>0:
+                return HttpResponse("Appointment not created select from other timings, Thanks")
+            else:
+                # get slot id of the user selected time
+                cursor.execute("SELECT s.slot_id FROM slots s Where s.slot_time=%s",[usertime])
+                records=cursor.fetchall()
+                slotid=records[0][0]
+                print(slotid)
+                bookstats=BookingStatus(doc=doctor_id, slot=slotid,status='Y',book_date=userday)
+                bookstats.save()
+            # print("flag",flag)
+            # # get booking status of the slots based on doc id
             reply={}
             reply['message']="Appointment in process, Thanks"
-            return render(request,"bot.html",{"response":reply})
+            return HttpResponse("Appointment in process, Thanks")
+            # return render(request,"bot.html",{"response":reply})
     else:
         reply['message']="Hi!! Book an Appointment"
         return render(request,"bot.html",{"response":reply})
-    # print(response['maintext'])
-    # print("called")
 
 
+# get all available doctors
 def getdoctors(request):
     reply={}
     doctors=[]
@@ -106,7 +137,37 @@ def getdoctors(request):
     # return render(request,"bot.html",{"response":reply})
 
 
+# get slots of all available doctors
+def getslots(request):
+    cursor=connection.cursor()
+    cursor.execute("SELECT DISTINCT b.book_date,s.slot_time FROM slots s INNER JOIN booking_status b on b.slot_id!=s.slot_id and s.slot_id not in(SELECT slot_id FROM booking_status)")
+    slots=cursor.fetchall()
+    print(type(slots))
+    return HttpResponse(slots)
 # this is just to know how forms are used..
+
+
+
+
+def slotsbydoc(request):
+    cursor=connection.cursor()
+    cursor.execute("SELECT DISTINCT b.book_date,s.slot_time FROM slots s INNER JOIN booking_status b on b.slot_id!=s.slot_id and s.slot_id not in(SELECT slot_id FROM booking_status where doc_id=2)")
+    slots=cursor.fetchall()
+    newslots=[]
+    for slot in slots:
+        date=slot[0]
+        time=slot[1]
+        datetime=str(date)+","+time+";  "
+        newslots.append(datetime)
+    print(newslots)
+    print(time)
+    # newslots
+    # for x,y in groupby(slots):
+
+    # slotsby_doc=Manager.raw(select distinct s.slot_id,s.slot_time from slots s INNER JOIN booking_status b
+    # on b.slot_id!=s.slot_id and s.slot_id not in(select slot_id from booking_status where doc_id=2));
+    return HttpResponse(newslots)
+
 def get_name(request):
     form={}
     if request.method == 'POST':

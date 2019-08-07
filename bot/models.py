@@ -11,10 +11,8 @@ class Doctors(models.Model):
         db_table = 'doctors'
 
 class BookingStatus(models.Model):
-    book_id = models.IntegerField(primary_key=True)
-    # doc id from doctors table
+    book_id = models.AutoField(primary_key=True)
     doc = models.ForeignKey('Doctors', models.DO_NOTHING, blank=True, null=True)
-    # slot id from slots table
     slot = models.ForeignKey('Slots', models.DO_NOTHING, blank=True, null=True)
     status = models.CharField(max_length=3)
     book_date = models.DateField()
