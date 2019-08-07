@@ -4,14 +4,15 @@ import pickle
 from apiclient.discovery import build
 import dateparser
 from datetime import datetime,timedelta
+from .models import Doctors,Slots,BookingStatus
 
 credentials=pickle.load(open('token.pkl','rb'))
 service=build("calendar","v3",credentials=credentials)
 result=service.calendarList().list().execute()
 calendar_id=result['items'][0]['id']
 now = datetime.utcnow().isoformat() + 'Z'
-
-
+replies={}
+replies['decision']='False'
 
 # to get all the events scheduled till now
 def get_events():
@@ -57,15 +58,20 @@ def event_suggest():
             suggested_times.append(x)
     suggested_times=','.join(suggested_times)
 
-    return "Pick from the suggested timings:" +'\n'+suggested_times
+    replies['message']="Pick from the suggested timings:" +'\n'+suggested_times
+
+    return replies
 
 # update the event based on the input from the user
 def update_event(newevent,event_id):
     event = service.events().get(calendarId=calendar_id,eventId=event_id).execute()
     event['summary']='Appointment'
     updated_event = service.events().update(calendarId=calendar_id, eventId=event['id'], body=event).execute()
-    print(updated_event['updated'])
-    return "Appointmet created,Thanks"
+    replies['decision']='True'
+    replies['message']='Appointment created,Thanks'
+    doctors=Doctors.objects.all()
+    print(doctors)
+    return replies
 
 # check if the event exist before
 def already_exists(new_event):
@@ -87,14 +93,12 @@ def get_date_events(date, events):
             d1 = event['start']['dateTime']
             if d1 == date:
                 lst.append(event)
-    print(i)
     return lst
 
 
 # for creating new event template to add in the google calendar
 def new_eve(text):
     matches=list(datefinder.find_dates(text))
-    print(matches)
     if len(matches)==0:
         return "null"
     else:
@@ -126,9 +130,8 @@ def new_eve(text):
 
 def getfuncval(text):
     event=new_eve(text)
-    print(event)
     if event=="null":
-        message="Sorry,I can book an appointment only if date and time are provided"
-        return message
+        replies['message']="Sorry,I can book an appointment only if date and time are provided"
+        return replies
     else:
         return create_event(event)
