@@ -138,10 +138,21 @@ def getdoctors(request):
 # get slots of all available doctors
 def getslots(request):
     cursor=connection.cursor()
-    cursor.execute("SELECT DISTINCT b.book_date,s.slot_time FROM slots s INNER JOIN booking_status b on b.slot_id!=s.slot_id and s.slot_id not in(SELECT slot_id FROM booking_status)")
-    slots=cursor.fetchall()
-    print(type(slots))
-    return HttpResponse(slots)
+    doctors=Doctors.objects.all()
+    doctor_id=""
+    availslots=[]
+    for doc in doctors:
+        doctor_id=doc.doc_id
+        print(doctor_id)
+        cursor.execute("SELECT DISTINCT b.book_date,s.slot_time FROM slots s INNER JOIN booking_status b on b.slot_id!=s.slot_id and s.slot_id not in(SELECT slot_id FROM booking_status where doc_id=%s)",[doc.doc_id])
+        slots=cursor.fetchall()
+        for slot in slots:
+            date=slot[0]
+            time=slot[1]
+            datetime=str(date)+","+time+";  "
+            availslots.append(doc.doc_name+":" + str(datetime))
+        print(availslots)
+    return HttpResponse(availslots)
 # this is just to know how forms are used..
 
 
@@ -160,8 +171,8 @@ def slotsbydoc(request):
         time=slot[1]
         datetime=str(date)+","+time+";  "
         newslots.append(datetime)
-    print(newslots)
-    print(time)
+    # print(newslots)
+    # print(time)
     return HttpResponse(newslots)
 
 def get_name(request):
