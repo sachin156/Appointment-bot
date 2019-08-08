@@ -146,10 +146,13 @@ def getslots(request):
 
 
 
-
+@csrf_exempt
 def slotsbydoc(request):
+    doctorname=request.POST.get('docname')
+    doc=Doctors.objects.get(doc_name=doctorname)
+    print(doc.doc_id)
     cursor=connection.cursor()
-    cursor.execute("SELECT DISTINCT b.book_date,s.slot_time FROM slots s INNER JOIN booking_status b on b.slot_id!=s.slot_id and s.slot_id not in(SELECT slot_id FROM booking_status where doc_id=2)")
+    cursor.execute("SELECT DISTINCT b.book_date,s.slot_time FROM slots s INNER JOIN booking_status b on b.slot_id!=s.slot_id and s.slot_id not in(SELECT slot_id FROM booking_status where doc_id=%s)",[doc.doc_id])
     slots=cursor.fetchall()
     newslots=[]
     for slot in slots:
@@ -159,11 +162,6 @@ def slotsbydoc(request):
         newslots.append(datetime)
     print(newslots)
     print(time)
-    # newslots
-    # for x,y in groupby(slots):
-
-    # slotsby_doc=Manager.raw(select distinct s.slot_id,s.slot_time from slots s INNER JOIN booking_status b
-    # on b.slot_id!=s.slot_id and s.slot_id not in(select slot_id from booking_status where doc_id=2));
     return HttpResponse(newslots)
 
 def get_name(request):
