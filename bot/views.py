@@ -105,17 +105,15 @@ def addappointment(request):
             if flag>0:
                 return HttpResponse("Appointment not created select from other timings, Thanks")
             else:
-                # get slot id of the user selected time
-                cursor.execute("SELECT s.slot_id FROM slots s Where s.slot_time=%s",[usertime])
-                records=cursor.fetchall()
-                slotid=records[0][0]
-                print(slotid)
-                bookstats=BookingStatus(doc=doctor_id, slot=slotid,status='Y',book_date=userday)
+                slotid=Slots.objects.get(slot_time=usertime)
+                print(slotid.slot_id)
+                print(doc.doc_id)
+                bookstats=BookingStatus(doc=doc,slot=slotid,status='Y',book_date=userday)
                 bookstats.save()
             # print("flag",flag)
             # # get booking status of the slots based on doc id
-            reply={}
-            reply['message']="Appointment in process, Thanks"
+            # reply={}
+            # reply['message']="Appointment in process, Thanks"
             return HttpResponse("Appointment in process, Thanks")
             # return render(request,"bot.html",{"response":reply})
     else:
