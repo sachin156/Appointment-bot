@@ -21,7 +21,6 @@ def index(request):
     reply={}
     reply['message']="Hi!! Book an Appointment"
     return HttpResponse("Hi, Book an Appointment")
-    # return render(request,"bot.html",{"response":reply})
 
 @csrf_exempt
 def getappointment(request):
@@ -36,14 +35,6 @@ def getappointment(request):
             return redirect('doctors')
         else:
             return redirect()
-            # return redirect('addappointment')
-            # reply=getfuncval(newtext)
-            # print(reply)
-            # reply['maintext']=newtext
-            # # print(reply['decision'])
-            # if reply['decision']=='True':
-            #     return redirect('addappointment',response=reply['maintext'])
-            # return render(request,"bot.html",{"response":reply})
     else:
         reply['message']="Hi!! Book an Appointment"
         return render(request,"bot.html",{"response":reply})
@@ -100,7 +91,6 @@ def addappointment(request):
                 cursor.execute("SELECT count(b.status) From booking_status b,slots s Where b.slot_id=s.slot_id and b.book_date=%s and s.slot_time=%s and doc_id=%s",[userday,usertime,doctor_id])
                 records=cursor.fetchall()
                 flag=records[0][0]
-                # SELECT count(b.status) FROM booking_status b,slots s Where b.slot_id=s.slot_id and s.slot_time=%s and b.doc_id=%s",[usertime],[doctor_id])
             print("flag",flag)
             if flag>0:
                 return HttpResponse("Appointment not created select from other timings, Thanks")
@@ -110,10 +100,6 @@ def addappointment(request):
                 print(doc.doc_id)
                 bookstats=BookingStatus(doc=doc,slot=slotid,status='Y',book_date=userday)
                 bookstats.save()
-            # print("flag",flag)
-            # # get booking status of the slots based on doc id
-            # reply={}
-            # reply['message']="Appointment in process, Thanks"
             return HttpResponse("Appointment in process, Thanks")
             # return render(request,"bot.html",{"response":reply})
     else:
@@ -156,7 +142,7 @@ def getslots(request):
 # this is just to know how forms are used..
 
 
-
+# get available slots by doctor name
 @csrf_exempt
 def slotsbydoc(request):
     doctorname=request.POST.get('docname')
@@ -174,30 +160,3 @@ def slotsbydoc(request):
     # print(newslots)
     # print(time)
     return HttpResponse(newslots)
-
-def get_name(request):
-    form={}
-    if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
-        form['normal'] = NameForm(request.POST)
-        form['contactform']=contactForm(request.POST)
-        # check whether it's valid:
-        if form.is_valid():
-            subject = form.cleaned_data['subject']
-            message = form.cleaned_data['message']
-            sender = form.cleaned_data['sender']
-            cc_myself = form.cleaned_data['cc_myself']
-
-            recipients = ['info@example.com']
-            if cc_myself:
-                recipients.append(sender)
-
-            send_mail(subject, message, sender, recipients)
-            return HttpResponse('Thanks')
-
-    # if a GET (or any other method) we'll create a blank form
-    else:
-        form['normal'] = NameForm(request.POST)
-        form['contactform']=contactForm(request.POST)
-
-    return render(request, 'new.html', {'form': form})
