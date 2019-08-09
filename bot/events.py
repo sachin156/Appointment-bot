@@ -30,17 +30,17 @@ def create_event(new_event):
         events_result = service.events().list(calendarId=calendar_id, timeMin=now,
                                                        maxResults=500, singleEvents=True,
                                                        orderBy='startTime').execute()
-        events=events_result['items']
-        event_id=""
-        date=new_event['start']['dateTime']+'+05:30'
-        events_result=events_result.get('items', [])
-        for event in events_result:
-            if date==event['start']['dateTime']:
-                event_id=event['id']
-        if event_id=="":
-            return event_suggest()
-        else:
-            return update_event(new_event,event_id)
+        # events=events_result['items']
+        # event_id=""
+        # date=new_event['start']['dateTime']+'+05:30'
+        # events_result=events_result.get('items', [])
+        # for event in events_result:
+        #     if date==event['start']['dateTime']:
+        #         event_id=event['id']
+        # if event_id=="":
+        #     return event_suggest()
+        # else:
+        return service.events().insert(calendarId=calendar_id, body=new_event).execute()
 
 # Suggesting the user available slots for the appointent
 def event_suggest():
@@ -106,7 +106,7 @@ def new_eve(text):
     end_time=start_time+timedelta(minutes=30)
 
     event = {
-      'summary': 'Appointment',
+      'summary': 'Doctor Appointment',
       'location': 'Hyderabad',
       'description': 'Appointment with the doctor',
       'start': {

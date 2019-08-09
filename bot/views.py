@@ -7,13 +7,7 @@ from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 import nltk
 
-from nltk.tag import StanfordNERTagger
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-
 from django.db import connection
-
-stop = stopwords.words('english')
 
 
 
@@ -44,64 +38,51 @@ def getappointment(request):
 def addappointment(request):
 
     reply={}
-    doctor=['get all doctors','list all doctors','can you get all the doctors',
-            'can you list all the doctors','list doctors']
     if request.method=='POST':
         newtext=request.POST.get('appointtext')
         print(newtext)
-        if newtext.lower() in doctor:
-            return redirect('doctors')
+        import datefinder
+        matches=list(datefinder.find_dates(newtext))
+        if len(matches)==0:
+            date_time=null
         else:
-            import datefinder
-            matches=list(datefinder.find_dates(newtext))
-            if len(matches)==0:
-                date_time=null
+            start_time=matches[0]
+            userday=str(start_time).split(" ")[0]
+            usertime=start_time.strftime('%H:%M')
+
+        print(userday)
+        print(usertime)
+
+        docname=request.POST.get('docname')
+
+        print(docname)
+
+        doctors=Doctors.objects.all()
+        doctor_id=""
+        for doc in doctors:
+            if docname.lower()==(doc.doc_name).lower():
+                doctor_id=doc.doc_id
+                break
             else:
-                start_time=matches[0]
-                userday=str(start_time).split(" ")[0]
-                usertime=start_time.strftime('%H:%M')
-
-            print(userday)
-            print(usertime)
-
-            # load stanford libraries to identify the person
-            st = StanfordNERTagger('/home/sachinv/Documents/stanford-ner/classifiers/english.all.3class.distsim.crf.ser.gz',
-                                   '/home/sachinv/Documents/stanford-ner/stanford-ner.jar',encoding='utf-8')
-            r=st.tag(newtext.title().split())
-            from itertools import groupby
-            for tag, chunk in groupby(r, lambda x:x[1]):
-                if tag== "PERSON":
-                    doctor=("%-12s"%tag, " ".join(w for w, t in chunk))
-            doc_name=(doctor[1])
-
-            print(doc_name)
-
-            doctors=Doctors.objects.all()
-            doctor_id=""
-            for doc in doctors:
-                if doc_name.lower()==(doc.doc_name).lower():
-                    doctor_id=doc.doc_id
-                    break
-                else:
-                    print("No doctor found")
-            flag=0
-            print(doctor_id)
-            cursor=connection.cursor()
-            if doctor_id!="":
-                cursor.execute("SELECT count(b.status) From booking_status b,slots s Where b.slot_id=s.slot_id and b.book_date=%s and s.slot_time=%s and doc_id=%s",[userday,usertime,doctor_id])
-                records=cursor.fetchall()
-                flag=records[0][0]
-            print("flag",flag)
-            if flag>0:
-                return HttpResponse("Appointment not created select from other timings, Thanks")
-            else:
-                slotid=Slots.objects.get(slot_time=usertime)
-                print(slotid.slot_id)
-                print(doc.doc_id)
-                bookstats=BookingStatus(doc=doc,slot=slotid,status='Y',book_date=userday)
-                bookstats.save()
-            return HttpResponse("Appointment in process, Thanks")
-            # return render(request,"bot.html",{"response":reply})
+                print("No doctor found")
+        flag=0
+        print(doctor_id)
+        cursor=connection.cursor()
+        if doctor_id!="":
+            cursor.execute("SELECT count(b.status) From booking_status b,slots s Where b.slot_id=s.slot_id and b.book_date=%s and s.slot_time=%s and doc_id=%s",[userday,usertime,doctor_id])
+            records=cursor.fetchall()
+            flag=records[0][0]
+        print("flag",flag)
+        if flag>0:
+            return HttpResponse("Appointment not created select from other timings, Thanks")
+        else:
+            slotid=Slots.objects.get(slot_time=usertime)
+            print(slotid.slot_id)
+            print(doc.doc_id)
+            bookstats=BookingStatus(doc=doc,slot=slotid,status='Y',book_date=userday)
+            bookstats.save()
+            getfuncval(newtext)
+        return HttpResponse("Appointment in process, Thanks")
     else:
         reply['message']="Hi!! Book an Appointment"
         return render(request,"bot.html",{"response":reply})
@@ -114,11 +95,7 @@ def getdoctors(request):
     temp=Doctors.objects.all()
     for doc in temp:
         doctors.append(doc.doc_name)
-    # print(temp)
-    # doctors= [doc.doc_name]
-    return HttpResponse(doctors)
-    # reply['message']="doctors: " +','.join(doctors)
-    # return render(request,"bot.html",{"response":reply})
+        return HttpResponse(doctors)
 
 
 # get slots of all available doctors
