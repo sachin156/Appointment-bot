@@ -6,7 +6,7 @@ from .forms import NameForm,contactForm
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
 import nltk
-
+from datetime import datetime, timedelta
 from django.db import connection
 
 
@@ -47,10 +47,14 @@ def addappointment(request):
             date_time=null
         else:
             start_time=matches[0]
-            userday=str(start_time).split(" ")[0]
+            # past = datetime.now() - timedelta(days=1)
+            # present = datetime.now()
+            # if past < present:
+            print((start_time))
+            userday=(start_time).split(" ")[0]
             usertime=start_time.strftime('%H:%M')
 
-        print(userday)
+        print(type(userday))
         print(usertime)
 
         docname=request.POST.get('docname')
