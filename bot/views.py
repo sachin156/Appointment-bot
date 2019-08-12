@@ -47,11 +47,8 @@ def addappointment(request):
             date_time=null
         else:
             start_time=matches[0]
-            # past = datetime.now() - timedelta(days=1)
-            # present = datetime.now()
-            # if past < present:
             print((start_time))
-            userday=(start_time).split(" ")[0]
+            userday=str(start_time).split(" ")[0]
             usertime=start_time.strftime('%H:%M')
 
         print(type(userday))
