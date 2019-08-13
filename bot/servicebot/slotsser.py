@@ -1,4 +1,4 @@
-from .models import Doctors,Slots,BookingStatus
+from bot.models import Doctors,Slots,BookingStatus
 from django.db import connection
 
 def slotscount(userday,usertime,doctor_id):

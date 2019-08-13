@@ -1,4 +1,4 @@
-from .models import Doctors,Slots,BookingStatus
+from bot.models import Doctors,Slots,BookingStatus
 #
 def getdoc():
     doctors=Doctors.objects.all()

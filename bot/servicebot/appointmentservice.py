@@ -1,4 +1,4 @@
-from .models import Doctors,Slots,BookingStatus
+from bot.models import Doctors,Slots,BookingStatus
 # from .docservice import bookappointments
 
 def bookappointment(doc,slotid,status,userday):

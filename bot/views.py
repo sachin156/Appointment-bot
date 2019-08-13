@@ -6,11 +6,12 @@ import datefinder
 
 import sys
 # from servicebot.new import docs
-print(sys.path)
-sys.path.insert(0, '/home/sachinv/Documents/chatbot/appointmentbot/servicebot')
-from .docservice import getdoc
-from .slots import slotscount,getslots,docslots
-from .appointmentservice import bookappointment
+# sys.path.insert(0, '/home/sachinv/Documents/chatbot/appointmentbot/bot/servicebot/')
+# print(sys.path)
+
+from .servicebot.docservice import getdoc
+from .servicebot.slotsser import slotscount,getslots,docslots
+from .servicebot.appointmentservice import bookappointment
 
 from django.core.mail import send_mail
 from django.views.decorators.csrf import csrf_exempt
