@@ -3,9 +3,8 @@ from .import views
 
 urlpatterns=[
 path('',views.index,name='index'),
-path('appointment',views.getappointment,name='appointment'),
-path('getdoctors',views.getdoctors,name='doctors'),
-path('addappointment',views.addappointment,name='addappointment'),
-path('getslots',views.getslots,name='getslots'),
+path('doctors',views.doctors,name='doctors'),
+path('appointment',views.appointment,name='appointment'),
+# path('slots',views.slots,name='slots'),
 path('slotsbydoc',views.slotsbydoc,name='slotsbydoc')
 ]
