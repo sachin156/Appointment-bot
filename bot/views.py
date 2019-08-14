@@ -5,10 +5,10 @@ from .models import Doctors,Slots,BookingStatus,Patients
 from django.db import connection
 
 
-from .servicebot.docservice import getdocbyname
+from .servicebot.docservice import getdocbyname,getdocbyid
 from .servicebot.slotsser import slotscount,getslots,docslots
-from .servicebot.appointmentservice import bookappointment
-from .servicebot.patientser import getpatients
+from .servicebot.appointmentservice import bookappointment,getbookstatus
+from .servicebot.patientser import getpatients,getpatientbyname
 
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
@@ -41,14 +41,16 @@ def appointment(request):
             usertime=start_time.strftime('%H:%M')
 
         if datetime.now()>start_time:
-            logger.exception("Enter Valid Date and Time")
+            logger.exception("Exception:Enter Valid Date and Time")
 
         logger.info("Information of doctor and patient")
+
         docname=request.POST.get('docname')
         patname=request.POST.get('patname')
 
         # call doctor service in docservice..
         doc=getdocbyname(docname)
+        pat=getpatientbyname(patname)
         if doc=="":
             logger.error("Error:Doctor name not found")
             return HttpResponse("Appointment not created,Doctor name not found")
@@ -61,7 +63,9 @@ def appointment(request):
                 return HttpResponse("Appointment not created,select from other timings")
             else:
                 slotid=getslots(usertime)
-                bookappointment(doc,slotid,"Y",userday)
+                if pat=="":
+                    logger.warning("Patient name not found!register new patient?")
+                bookappointment(doc,slotid,"Y",userday,pat)
                 getfuncval(newtext)
             return HttpResponse("Appointment in process, Thanks")
     else:
@@ -119,9 +123,19 @@ def doctorslots(request,docname):
             newslots.append(datetime)
         return HttpResponse(newslots)
 
+@require_http_methods(["GET"])
 def patients(request):
     allpatients=getpatients()
     patientdetails=[]
     for patient in allpatients:
         patientdetails.append(patient.name+""+str(patient.pid)+" ")
     return HttpResponse(patientdetails)
+
+
+def patientbookstatus(request,patname):
+    pid=getpatientbyname(patname)
+    patstat=getbookstatus(pid)
+    # print(patstat.doc)
+    docname=getdocbyid(patstat.doc_id)
+    info="Name:"+patname+" "+"BookingId"+str(patstat.book_id)+" "+"Doctor:"+docname.doc_name
+    return HttpResponse(info)

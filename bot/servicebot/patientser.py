@@ -7,11 +7,9 @@ def getpatients():
     patientsall=Patients.objects.all()
     return patientsall
 
-def getpatientid(docname):
-    doctors=getpatients()
-    doctor_id=""
-    for doc in doctors:
-        if docname.lower()==(doc.doc_name).lower():
-            doctor_id=doc.doc_id
-            break
-    return doctor_id
+def getpatientbyname(patname):
+    patients=getpatients()
+    for pat in patients:
+        if patname.lower()==(pat.name).lower():
+            return pat
+    return ""

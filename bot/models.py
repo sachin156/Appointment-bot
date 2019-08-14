@@ -7,10 +7,12 @@ class BookingStatus(models.Model):
     slot = models.ForeignKey('Slots', models.DO_NOTHING, blank=True, null=True)
     book_date = models.DateField()
     status = models.CharField(max_length=255, blank=True, null=True)
+    pat = models.ForeignKey('Patients', models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False
         db_table = 'booking_status'
+
 
 class Doctors(models.Model):
     doc_id = models.AutoField(primary_key=True)
@@ -26,7 +28,6 @@ class Patients(models.Model):
     pid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
     contact = models.IntegerField()
-    booking = models.ForeignKey(BookingStatus, models.DO_NOTHING, blank=True, null=True)
 
     class Meta:
         managed = False

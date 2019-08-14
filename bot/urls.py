@@ -8,4 +8,5 @@ path('appointment',views.appointment,name='appointment'),
 path('slots',views.slotsbydoc,name='slotsbydoc'),
 path('slotsbydoc/<slug:docname>/',views.doctorslots,name='slots'),
 path('patients',views.patients,name='patients'),
+path('patients/<str:patname>/',views.patientbookstatus,name='patinfo')
 ]

@@ -11,6 +11,14 @@ def getdocbyname(docname):
             return doc
     return ""
 
+def getdocbyid(docid):
+    doctors=getdoctors()
+    for doc in doctors:
+        if docid==doc.doc_id:
+            return doc
+    return ""
+
+
 def createdoc(docname,spec):
     bookstats=Doctors(doc_name=docname,specialization=spec)
     bookstats.save()
