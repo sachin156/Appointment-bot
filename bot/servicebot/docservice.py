@@ -1,8 +1,15 @@
 from bot.models import Doctors,Slots,BookingStatus
 #
-def getdoc():
+def getdoctors():
     doctors=Doctors.objects.all()
     return doctors
+
+def getdocbyname(docname):
+    doctors=getdoctors()
+    for doc in doctors:
+        if docname.lower()==(doc.doc_name).lower():
+            return doc
+    return ""
 
 def createdoc(docname,spec):
     bookstats=Doctors(doc_name=docname,specialization=spec)
