@@ -1,11 +1,11 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from .events import getfuncval
+from .calendarevents import getfuncval
 from .models import Doctors,Slots,BookingStatus,Patients
 from django.db import connection
 
 
-from .servicebot.docservice import getdocbyname,getdocbyid
+from .servicebot.docservice import getdocbyname,getdocbyid,deletedoc
 from .servicebot.slotsser import slotscount,getslots,docslots
 from .servicebot.appointmentservice import bookappointment,getbookstatus
 from .servicebot.patientser import getpatients,getpatientbyname
@@ -44,16 +44,15 @@ def appointment(request):
             logger.exception("Exception:Enter Valid Date and Time")
 
         logger.info("Information of doctor and patient")
-
         docname=request.POST.get('docname')
         patname=request.POST.get('patname')
 
         # call doctor service in docservice..
         doc=getdocbyname(docname)
         pat=getpatientbyname(patname)
-        if doc=="":
-            logger.error("Error:Doctor name not found")
-            return HttpResponse("Appointment not created,Doctor name not found")
+        if doc=="" or pat=="":
+            logger.error("Error:Doctor or patient name not found")
+            return HttpResponse("Appointment not created")
         else:
             doctor_id=doc.doc_id
             flag=0
@@ -63,8 +62,6 @@ def appointment(request):
                 return HttpResponse("Appointment not created,select from other timings")
             else:
                 slotid=getslots(usertime)
-                if pat=="":
-                    logger.warning("Patient name not found!register new patient?")
                 bookappointment(doc,slotid,"Y",userday,pat)
                 getfuncval(newtext)
             return HttpResponse("Appointment in process, Thanks")
@@ -104,6 +101,7 @@ def slotsbydoc(request):
             return HttpResponse(newslots)
     return HttpResponse("Doctor name")
 
+
 @require_http_methods(["GET","POST"])
 def doctorslots(request,docname):
     docname=docname
@@ -134,8 +132,18 @@ def patients(request):
 
 def patientbookstatus(request,patname):
     pid=getpatientbyname(patname)
-    patstat=getbookstatus(pid)
+    patstats=getbookstatus(pid)
+    info=""
+    for pat in patstats:
+        docname=getdocbyid(pat.doc_id)
+        info+="Name:"+patname+" "+"BookingId:"+str(pat.book_id)+" "+"Doctor:"+docname.doc_name+" "+"BookDate:"+str(pat.book_date)+"\n"
     # print(patstat.doc)
-    docname=getdocbyid(patstat.doc_id)
-    info="Name:"+patname+" "+"BookingId"+str(patstat.book_id)+" "+"Doctor:"+docname.doc_name
     return HttpResponse(info)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def testservice(request):
+    docname=request.POST.get('docname')
+    deletedoc(docname.lower())
+    return HttpResponse("Doctor delete")

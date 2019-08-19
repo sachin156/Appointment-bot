@@ -7,5 +7,5 @@ def bookappointment(doc,slotid,status,userday,pat):
     return "Appointment created"
 
 def getbookstatus(pid):
-    patstatus=BookingStatus.objects.get(pat=pid)
+    patstatus=BookingStatus.objects.filter(pat=pid)
     return patstatus

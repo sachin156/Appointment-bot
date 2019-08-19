@@ -5,6 +5,9 @@ from apiclient.discovery import build
 import dateparser
 from datetime import datetime,timedelta
 from .models import Doctors,Slots,BookingStatus
+import smtplib
+
+
 
 credentials=pickle.load(open('token.pkl','rb'))
 service=build("calendar","v3",credentials=credentials)
@@ -40,8 +43,13 @@ def create_event(new_event):
         # if event_id=="":
         #     return event_suggest()
         # else:
-        return service.events().insert(calendarId=calendar_id, body=new_event).execute()
-
+        # service.events().insert(calendarId=calendar_id, body=new_event).execute()
+        # server = smtplib.SMTP('smtp.gmail.com', 587)
+        # server.starttls()
+        # server.login("sachin.vadlakonda@imaginea.com")
+        # msg = "\nHello!" # The /n separates the message from the headers (which we ignore for this example)
+        # server.sendmail("sachin.vadlakonda@imaginea.com", "sachin.vadlakonda@imaginea.com", msg)
+        # server.quit()
 # Suggesting the user available slots for the appointent
 def event_suggest():
     events_result = service.events().list(calendarId=calendar_id, timeMin=now,
