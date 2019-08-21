@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from .models import Doctors,Slots,BookingStatus,Patients
 from django.db import connection
 
-from .servicebot.docservice import getdocbyname,getdocbyid,deletedoc,getdoctors,createdoc,docslots
+from .docservice import getdocbyname,getdocbyid,deletedoc,getdoctors,createdoc,docslots
 
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt

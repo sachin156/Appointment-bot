@@ -3,13 +3,8 @@ from django.http import HttpResponse
 from .models import BookingStatus,Patients
 from django.db import connection
 
-from .servicebot.patientser import getpatients,getpatientbyname,addpat,delpat
-import os.path
-import sys
+from .patientser import getpatients,getpatientbyname,addpat,delpat
 
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "/home/sachinv/Documents/chatbot/appointmentbot (copy)/bot/servicebot")))
-# sys.path.insert(1,'/home/sachinv/Documents/chatbot/appointmentbot (copy)/bot/servicebot')
-print(sys.path)
 from bot.appointmentservice import getbookstatus
 from doctors.docservice import getdocbyid
 from django.views.decorators.http import require_http_methods
@@ -23,7 +18,7 @@ logger=logging.getLogger(__name__)
 def index(request):
     reply={}
     reply['message']="Hi!! Book an Appointment"
-    return HttpResponse("Patients Page")
+    return HttpResponse("Hi, Patients Page")
 
 @require_http_methods(["GET"])
 def allpatients(request):
