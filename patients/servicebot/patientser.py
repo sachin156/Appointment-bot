@@ -7,6 +7,10 @@ def getpatients():
     patientsall=Patients.objects.all()
     return patientsall
 
+def getbookstatus(pid):
+    patstatus=BookingStatus.objects.filter(pat=pid)
+    return patstatus
+
 def getpatientbyname(patname):
     patients=getpatients()
     for pat in patients:
@@ -14,12 +18,13 @@ def getpatientbyname(patname):
             return pat
     return ""
 
-def addpatient(patname,number):
-    newpatient=Doctors(name=patname,contact=number)
+def addpat(patname,contact):
+    newpatient=Patients(name=patname,contact=contact)
     newpatient.save()
+    return "new patient added"
 
-def deletepatient(patname):
+def delpat(patname):
     patient=Patients.objects.get(name=patname)
-    BookingStatus.objects.filter(pat=patient.name).delete()
-    patinet.delete()
+    BookingStatus.objects.filter(pat=patient.pid).delete()
+    patient.delete()
     return "Patient record deleted"

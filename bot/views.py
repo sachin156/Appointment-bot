@@ -7,7 +7,7 @@ from django.db import connection
 
 from .servicebot.docservice import getdocbyname,getdocbyid,deletedoc
 from .servicebot.slotsser import slotscount,getslots,docslots
-from .servicebot.appointmentservice import bookappointment,getbookstatus
+from .appointmentservice import bookappointment,getbookstatus,cancelappt
 from .servicebot.patientser import getpatients,getpatientbyname
 
 from django.views.decorators.http import require_http_methods
@@ -17,7 +17,6 @@ import logging
 import datefinder
 
 logger=logging.getLogger(__name__)
-
 
 
 def index(request):
@@ -69,81 +68,81 @@ def appointment(request):
         reply['message']="Hi!! Book an Appointment"
         return render(request,"bot.html",{"response":reply})
 
-@require_http_methods(["GET"])
-# get all available doctors
-def doctors(request):
-    reply={}
-    doctors=[]
-    temp=getdoc()
-    for doc in temp:
-        doctors.append(doc.doc_name)
-    return HttpResponse(doctors)
-
-# get available slots by doctor name
-@require_http_methods(["POST"])
 @csrf_exempt
-def slotsbydoc(request):
-    if request.method=='POST':
-        docname=request.POST.get('docname')
-        # doctorid=docid(docname)
-        doctors=getdocbyname()
-        if doc=="":
-            logger.error("Error:Doctor name not found")
-            return HttpResponse("Appointment not created,Doctor name not found")
-        else:
-            newslots=[]
-            slots=docslots(doctorid)
-            for slot in slots:
-                date=slot[0]
-                time=slot[1]
-                datetime=str(date)+","+time+";  "
-                newslots.append(datetime)
-            return HttpResponse(newslots)
-    return HttpResponse("Doctor name")
-
-
-@require_http_methods(["GET","POST"])
-def doctorslots(request,docname):
-    docname=docname
-    doctors=getdocbyname()
-    if doc=="":
-        logger.error("Error:Doctor name not found")
-        return HttpResponse("Appointment not created,Doctor name not found")
-    else:
-        newslots=[]
-        slots=docslots(doctorid)
-        if not slots:
-            logger.warning("No available slots ,change doc?")
-        for slot in slots:
-            date=slot[0]
-            time=slot[1]
-            datetime=str(date)+","+time+";  "
-            newslots.append(datetime)
-        return HttpResponse(newslots)
-
-@require_http_methods(["GET"])
-def patients(request):
-    allpatients=getpatients()
-    patientdetails=[]
-    for patient in allpatients:
-        patientdetails.append(patient.name+""+str(patient.pid)+" ")
-    return HttpResponse(patientdetails)
-
-
-def patientbookstatus(request,patname):
-    pid=getpatientbyname(patname)
-    patstats=getbookstatus(pid)
-    info=""
-    for pat in patstats:
-        docname=getdocbyid(pat.doc_id)
-        info+="Name:"+patname+" "+"BookingId:"+str(pat.book_id)+" "+"Doctor:"+docname.doc_name+" "+"BookDate:"+str(pat.book_date)+"\n"
-    # print(patstat.doc)
-    return HttpResponse(info)
-
-
-@csrf_exempt
-@require_http_methods(["POST"])
-def testservice(request):
+def cancelappointment(request):
+    patname=request.POST.get('patname')
     docname=request.POST.get('docname')
-    deletedoc(docname.lower())
-    return HttpResponse("Doctor delete")
+    msg=cancelappt(patname,docname)
+    return HttpResponse(msg)
+
+
+# @require_http_methods(["GET"])
+# # get all available doctors
+# def doctors(request):
+#     reply={}
+#     doctors=[]
+#     temp=getdoc()
+#     for doc in temp:
+#         doctors.append(doc.doc_name)
+#     return HttpResponse(doctors)
+#
+# # get available slots by doctor name
+# @require_http_methods(["POST"])
+# @csrf_exempt
+# def slotsbydoc(request):
+#     if request.method=='POST':
+#         docname=request.POST.get('docname')
+#         # doctorid=docid(docname)
+#         doctors=getdocbyname()
+#         if doc=="":
+#             logger.error("Error:Doctor name not found")
+#             return HttpResponse("Appointment not created,Doctor name not found")
+#         else:
+#             newslots=[]
+#             slots=docslots(doctorid)
+#             for slot in slots:
+#                 date=slot[0]
+#                 time=slot[1]
+#                 datetime=str(date)+","+time+";  "
+#                 newslots.append(datetime)
+#             return HttpResponse(newslots)
+#     return HttpResponse("Doctor name")
+#
+#
+# @require_http_methods(["GET","POST"])
+# def doctorslots(request,docname):
+#     docname=docname
+#     doctors=getdocbyname()
+#     if doc=="":
+#         logger.error("Error:Doctor name not found")
+#         return HttpResponse("Appointment not created,Doctor name not found")
+#     else:
+#         newslots=[]
+#         slots=docslots(doctorid)
+#         if not slots:
+#             logger.warning("No available slots ,change doc?")
+#         for slot in slots:
+#             date=slot[0]
+#             time=slot[1]
+#             datetime=str(date)+","+time+";  "
+#             newslots.append(datetime)
+#         return HttpResponse(newslots)
+#
+# @require_http_methods(["GET"])
+# def patients(request):
+#     allpatients=getpatients()
+#     patientdetails=[]
+#     for patient in allpatients:
+#         patientdetails.append(patient.name+""+str(patient.pid)+" ")
+#     return HttpResponse(patientdetails)
+#
+#
+# def patientbookstatus(request,patname):
+#     pid=getpatientbyname(patname)
+#     patstats=getbookstatus(pid)
+#     info=""
+#     for pat in patstats:
+#         docname=getdocbyid(pat.doc_id)
+#         info+="Name:"+patname+" "+"BookingId:"+str(pat.book_id)+" "+"Doctor:"+docname.doc_name+" "+"BookDate:"+str(pat.book_date)+"\n"
+#     # print(patstat.doc)
+#     return HttpResponse(info)

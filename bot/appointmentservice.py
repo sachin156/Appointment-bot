@@ -1,4 +1,4 @@
-from bot.models import Doctors,Slots,BookingStatus,Patients
+from .models import Doctors,Slots,BookingStatus,Patients
 
 
 def bookappointment(doc,slotid,status,userday,pat):
@@ -8,7 +8,7 @@ def bookappointment(doc,slotid,status,userday,pat):
 
 def getbookstatus(pid):
     patstatus=BookingStatus.objects.filter(pat=pid)
-    return patstatuss
+    return patstatus
 
 def cancelappt(patname,docname):
     patient=Patients.objects.get(name=patname)
