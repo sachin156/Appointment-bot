@@ -5,7 +5,8 @@ from django.db import connection
 
 from .patientser import getpatients,getpatientbyname,addpat,delpat
 
-from bot.appointmentservice import getbookstatus
+from bot.appointmentservice import getbookstatus,GetSlot
+# from bot.tempd.appointmentservice import getbookstatus,GetSlot
 from doctors.docservice import getdocbyid
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
@@ -51,5 +52,7 @@ def patientbookstatus(request):
     info=""
     for pat in patstats:
         docname=getdocbyid(pat.doc_id)
-        info+="Name:"+patname+" "+"BookingId:"+str(pat.book_id)+" "+"Doctor:"+docname.doc_name+" "+"BookDate:"+str(pat.book_date)+"\n"
+        logger.error(pat.slot)
+        slottime=GetSlot(pat.slot_id)
+        info+="Name:"+patname+" "+"BookingId:"+str(pat.book_id)+" "+"Doctor:"+docname.doc_name+" "+"BookDate:"+str(pat.book_date)+" "+"Time:"+slottime.slot_time+"\n"
     return HttpResponse(info)

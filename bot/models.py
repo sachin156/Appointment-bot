@@ -33,17 +33,6 @@ class Patients(models.Model):
         managed = False
         db_table = 'patients'
 
-
-
-class Scheduling(models.Model):
-    pid = models.ForeignKey(Patients, models.DO_NOTHING, db_column='pid', blank=True, null=True)
-    field_date = models.DateField(db_column='_date')  # Field renamed because it started with '_'.
-
-    class Meta:
-        managed = False
-        db_table = 'scheduling'
-
-
 class Slots(models.Model):
     slot_id = models.IntegerField(primary_key=True)
     slot_time = models.CharField(max_length=10)
