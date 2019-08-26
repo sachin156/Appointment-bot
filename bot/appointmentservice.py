@@ -19,8 +19,9 @@ def cancelappt(patname,docname):
     BookingStatus.objects.filter(pat=patient.pid,doc=doctor.doc_id).delete()
     return "Appointment canceled"
 
-def apptbyday():
-    return "apptbyday"
+def apptbydoc(docname):
+    bookings=BookingStatus.objects.filter(doc_name=docname)
+    return bookings
 
 def slotscount(userday,usertime,doctor_id):
     cursor.execute("SELECT count(b.status) From booking_status b,slots s Where b.slot_id=s.slot_id and b.book_date=%s and s.slot_time=%s and doc_id=%s",[userday,usertime,doctor_id])

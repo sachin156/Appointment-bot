@@ -44,8 +44,25 @@ def delpatient(request):
     return HttpResponse(msg)
 
 @csrf_exempt
-def patientbookstatus(request):
+def patientbookstat(request):
     patname=request.POST.get('patname')
+    pid=getpatientbyname(patname)
+    logger.error(pid)
+    patstats=getbookstatus(pid)
+    info=""
+    for pat in patstats:
+        docname=getdocbyid(pat.doc_id)
+        logger.error(pat.slot)
+        slottime=GetSlot(pat.slot_id)
+        info+="Name:"+patname+" "+"BookingId:"+str(pat.book_id)+" "+"Doctor:"+docname.doc_name+" "+"BookDate:"+str(pat.book_date)+" "+"Time:"+slottime.slot_time+"\n"
+    return HttpResponse(info)
+
+
+
+@csrf_exempt
+def patientbookstatus(request,patname):
+    # patname=request.POST.get('patname')
+    print(patname)
     pid=getpatientbyname(patname)
     logger.error(pid)
     patstats=getbookstatus(pid)

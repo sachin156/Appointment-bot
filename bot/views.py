@@ -4,8 +4,9 @@ from .calendarevents import getfuncval
 from .models import Doctors,Slots,BookingStatus,Patients
 from django.db import connection
 
-from .appointmentservice import bookappointment,getbookstatus,cancelappt,slotscount,getslots,docslots
-
+from .appointmentservice import bookappointment,getbookstatus,cancelappt,slotscount,getslots,docslots,apptbydoc
+from doctors.docservice import getdocbyname
+from patients.patientser import getpatientbyname
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
