@@ -28,10 +28,9 @@ def createdoc(docname,spec):
 
 def deletedoc(docname):
     doctor=Doctors.objects.get(doc_name=docname)
-    print(type(doctor))
     if not doctor:
         return "No doctor found"
-    bookstats=BookingStatus.objects.filter(doc=doctor.doc_id).delete()
+    BookingStatus.objects.filter(doc=doctor.doc_id).delete()
     doctor.delete()
     return "doctor deleted"
 

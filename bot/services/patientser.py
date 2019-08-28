@@ -21,6 +21,8 @@ def addpat(patname,contact):
 
 def delpat(patname):
     patient=Patients.objects.get(name=patname)
+    if not patient:
+        return "No doctor found"
     BookingStatus.objects.filter(pat=patient.pid).delete()
     patient.delete()
     return "Patient record deleted"

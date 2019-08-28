@@ -2,7 +2,8 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from bot.calendarevents import getfuncval
 from django.db import connection
-from bot.servicefold.docservice import getdocbyname,getdocbyid,deletedoc,getdoctors,createdoc,docslots
+
+from bot.services.docservice import getdocbyname,getdocbyid,deletedoc,getdoctors,createdoc,docslots
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
@@ -19,7 +20,6 @@ def index(request):
 @require_http_methods(["GET"])
 # get all available doctors
 def alldocs(request):
-    reply={}
     doctors=[]
     temp=getdoctors()
     for doc in temp:

@@ -3,9 +3,9 @@ from django.http import HttpResponse
 from bot.calendarevents import getfuncval
 from django.db import connection
 
-from bot.servicefold.appointmentservice import bookappointment,getbookstatus,cancelappt,slotscount,getslots,docslots,apptbydoc
-from bot.servicefold.docservice import getdocbyname
-from bot.servicefold.patientser import getpatientbyname
+from bot.services.appointmentservice import bookappointment,getbookstatus,cancelappt,slotscount,getslots,docslots,apptbydoc
+from bot.services.docservice import getdocbyname
+from bot.services.patientser import getpatientbyname
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
@@ -23,7 +23,7 @@ def index(request):
 
 @require_http_methods(["GET","POST"])
 @csrf_exempt
-def appointment(request):
+def addappointment(request):
     reply={}
     if request.method=='POST':
         newtext=request.POST.get('appointtext')
@@ -65,10 +65,14 @@ def appointment(request):
         return render(request,"bot.html",{"response":reply})
 
 
-
+@require_http_methods(["POST"])
 @csrf_exempt
 def cancelappointment(request):
     patname=request.POST.get('patname')
     docname=request.POST.get('docname')
     msg=cancelappt(patname,docname)
     return HttpResponse(msg)
+
+
+def getappbyday(request):
+    return "all"

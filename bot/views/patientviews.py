@@ -1,11 +1,12 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from bot.calendarevents import getfuncval
 from django.db import connection
 
-from bot.servicefold.appointmentservice import getbookstatus
-from bot.servicefold.docservice import getdocbyname,getdocbyid
-from bot.servicefold.patientser import getpatientbyname,getpatients,delpat,addpat
+from bot.calendarevents import getfuncval
+from bot.services.appointmentservice import getbookstatus,GetSlot
+from bot.services.docservice import getdocbyname,getdocbyid
+from bot.services.patientser import getpatientbyname,getpatients,delpat,addpat
+
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
