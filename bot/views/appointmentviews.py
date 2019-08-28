@@ -3,9 +3,15 @@ from django.http import HttpResponse
 from bot.calendarevents import getfuncval
 from django.db import connection
 
+<<<<<<< HEAD
 from bot.services.appointmentservice import bookappointment,getbookstatus,cancelappt,slotscount,getslots,docslots,apptbydoc
 from bot.services.docservice import getdocbyname
 from bot.services.patientser import getpatientbyname
+=======
+from bot.servicefold.appointmentservice import bookappointment,getbookstatus,cancelappt,slotscount,getslots,docslots,apptbydoc
+from bot.servicefold.docservice import getdocbyname
+from bot.servicefold.patientser import getpatientbyname
+>>>>>>> d9351ad31fb6243b301f529ff1e89d93d55044aa
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta

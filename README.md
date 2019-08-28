@@ -4,6 +4,12 @@
 
 main folder for the process is bot and events.py is used for the add,fetch calendar events..
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> d9351ad31fb6243b301f529ff1e89d93d55044aa
 Pickle file is generate using below code...
 
 from apiclient.discovery import build
