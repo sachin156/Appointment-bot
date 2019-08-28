@@ -1,0 +1,6 @@
+<form method="POST" action={% url 'addappointment' %}>
+  {% csrf_token %}
+<p>Bot: {{response.message}}</p>
+<input type="text" name="appointtext" value="">
+<input type="submit" value="Submit">
+</form>
