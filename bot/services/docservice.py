@@ -4,6 +4,9 @@ from django.db import connection
 cursor=connection.cursor()
 
 def getdoctors():
+    # cursor.execute("SELECT * from doctors")
+    # doctors=cursor.fetchall()
+    # return slots
     doctors=Doctors.objects.all()
     return doctors
 

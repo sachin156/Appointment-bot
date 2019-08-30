@@ -41,8 +41,3 @@ def docslots(doctor_id):
 def GetSlot(slotid):
     slots=Slots.objects.get(slot_id=slotid)
     return slots
-
-
-
-
-#\\\ef getdoc

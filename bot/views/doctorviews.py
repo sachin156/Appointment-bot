@@ -22,8 +22,9 @@ def index(request):
 def alldocs(request):
     doctors=[]
     temp=getdoctors()
+    # print(temp)
     for doc in temp:
-        doctors.append(doc.doc_name)
+        doctors.append(doc.doc_name+" ")
     return HttpResponse(doctors)
 
 # get available slots by doctor name

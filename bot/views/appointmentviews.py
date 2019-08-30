@@ -12,7 +12,13 @@ from datetime import datetime, timedelta
 import logging
 import datefinder
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
 logger=logging.getLogger(__name__)
+
+
 
 
 def index(request):
@@ -20,13 +26,12 @@ def index(request):
     reply['message']="Hi!! Book an Appointment"
     return HttpResponse("Hi, Book an Appointment")
 
-
-@require_http_methods(["GET","POST"])
-@csrf_exempt
-def addappointment(request):
-    reply={}
-    if request.method=='POST':
+class AppointmentView(APIView):
+    @csrf_exempt
+    def post(self,request,format=None):
+        # print(request.data.get('appointtext'))
         newtext=request.POST.get('appointtext')
+        # logger.error(newtext)
         matches=list(datefinder.find_dates(newtext))
         if len(matches)==0:
             logger.error("Error:No Date and time")
@@ -37,6 +42,7 @@ def addappointment(request):
 
         if datetime.now()>start_time:
             logger.exception("Exception:Enter Valid Date and Time")
+            return HttpResponse("Appointment not created,select from other timings")
 
         logger.info("Information of doctor and patient")
         docname=request.POST.get('docname')
@@ -60,10 +66,9 @@ def addappointment(request):
                 bookappointment(doc,slotid,"Y",userday,pat)
                 getfuncval(newtext)
             return HttpResponse("Appointment in process, Thanks")
-    else:
-        reply['message']="Hi!! Book an Appointment"
-        return render(request,"bot.html",{"response":reply})
-
+    
+    def get(self,request,format=None):
+        return HttpResponse("Hi!! Book an Appointment")
 
 @require_http_methods(["POST"])
 @csrf_exempt
@@ -72,7 +77,3 @@ def cancelappointment(request):
     docname=request.POST.get('docname')
     msg=cancelappt(patname,docname)
     return HttpResponse(msg)
-
-
-def getappbyday(request):
-    return "all"
