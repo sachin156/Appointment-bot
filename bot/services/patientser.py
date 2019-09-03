@@ -1,4 +1,7 @@
-from bot.models import Doctors,Slots,BookingStatus,Patients
+# from bot.modelsdb.appointmentmodels import BookingStatus,Slots
+# from bot.modelsdb.doctormodels import Doctors
+# from bot.modelsdb.patientmodels import Patients
+from bot.models import Patients,BookingStatus
 from django.db import connection
 
 cursor=connection.cursor()
@@ -22,7 +25,7 @@ def addpat(patname,contact):
 def delpat(patname):
     patient=Patients.objects.get(name=patname)
     if not patient:
-        return "No doctor found"
+        return "No Patient found"
     BookingStatus.objects.filter(pat=patient.pid).delete()
     patient.delete()
     return "Patient record deleted"

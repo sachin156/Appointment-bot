@@ -3,7 +3,8 @@ from django.http import HttpResponse
 from django.db import connection
 
 from bot.calendarevents import getfuncval
-from bot.services.appointmentservice import getbookstatus,GetSlot
+from bot.services.appointmentservice import getbookstatus
+from bot.services.slotsservice import slotscount,getslots,docslots
 from bot.services.docservice import getdocbyname,getdocbyid
 from bot.services.patientser import getpatientbyname,getpatients,delpat,addpat
 

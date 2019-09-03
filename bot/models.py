@@ -29,6 +29,7 @@ class Patients(models.Model):
     pid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
     contact = models.IntegerField()
+    patcontact = models.IntegerField() # temp field 
 
     class Meta:
         managed = False
@@ -41,3 +42,4 @@ class Slots(models.Model):
     class Meta:
         managed = False
         db_table = 'slots'
+

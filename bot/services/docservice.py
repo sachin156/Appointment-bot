@@ -1,12 +1,12 @@
-from bot.models import Doctors,Slots,BookingStatus
+# from bot.modelsdb.appointmentmodels import BookingStatus,Slots
+# from bot.modelsdb.doctormodels import Doctors
+# from bot.modelsdb.patientmodels import Patients
+from bot.models import Doctors,BookingStatus
 from django.db import connection
 
 cursor=connection.cursor()
 
 def getdoctors():
-    # cursor.execute("SELECT * from doctors")
-    # doctors=cursor.fetchall()
-    # return slots
     doctors=Doctors.objects.all()
     return doctors
 
