@@ -1,8 +1,8 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from bot.calendarevents import getfuncval
 from django.db import connection
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 from bot.services.appointmentservice import getbookstatus,GetSlot
 from bot.services.docservice import getdocbyname,getdocbyid
@@ -12,6 +12,14 @@ from bot.servicefold.appointmentservice import getbookstatus
 from bot.servicefold.docservice import getdocbyname,getdocbyid
 from bot.servicefold.patientser import getpatientbyname,getpatients,delpat,addpat
 >>>>>>> d9351ad31fb6243b301f529ff1e89d93d55044aa
+=======
+from bot.services.calendarevents import getfuncval
+from bot.services.appointmentservice import getbookstatus
+from bot.services.slotsservice import slotscount,getslots,docslots
+from bot.services.docservice import getdocbyname,getdocbyid
+from bot.services.patientser import getpatientbyname,getpatients,delpat,addpat
+
+>>>>>>> branch5bot
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta

@@ -1,8 +1,9 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from bot.calendarevents import getfuncval
+from bot.services.calendarevents import getfuncval
 from django.db import connection
 
+<<<<<<< HEAD
 <<<<<<< HEAD
 from bot.services.appointmentservice import bookappointment,getbookstatus,cancelappt,slotscount,getslots,docslots,apptbydoc
 from bot.services.docservice import getdocbyname
@@ -12,13 +13,25 @@ from bot.servicefold.appointmentservice import bookappointment,getbookstatus,can
 from bot.servicefold.docservice import getdocbyname
 from bot.servicefold.patientser import getpatientbyname
 >>>>>>> d9351ad31fb6243b301f529ff1e89d93d55044aa
+=======
+from bot.services.appointmentservice import bookappointment,getbookstatus,cancelappt,apptbydoc
+from bot.services.slotsservice import slotscount,getslots,docslots
+from bot.services.docservice import getdocbyname
+from bot.services.patientser import getpatientbyname
+>>>>>>> branch5bot
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
 import logging
 import datefinder
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+
 logger=logging.getLogger(__name__)
+
+
 
 
 def index(request):
@@ -26,13 +39,12 @@ def index(request):
     reply['message']="Hi!! Book an Appointment"
     return HttpResponse("Hi, Book an Appointment")
 
-
-@require_http_methods(["GET","POST"])
-@csrf_exempt
-def appointment(request):
-    reply={}
-    if request.method=='POST':
+class AppointmentView(APIView):
+    @csrf_exempt
+    def post(self,request,format=None):
+        # print(request.data.get('appointtext'))
         newtext=request.POST.get('appointtext')
+        # logger.error(newtext)
         matches=list(datefinder.find_dates(newtext))
         if len(matches)==0:
             logger.error("Error:No Date and time")
@@ -43,6 +55,7 @@ def appointment(request):
 
         if datetime.now()>start_time:
             logger.exception("Exception:Enter Valid Date and Time")
+            return HttpResponse("Appointment not created,select from other timings")
 
         logger.info("Information of doctor and patient")
         docname=request.POST.get('docname')
@@ -66,12 +79,11 @@ def appointment(request):
                 bookappointment(doc,slotid,"Y",userday,pat)
                 getfuncval(newtext)
             return HttpResponse("Appointment in process, Thanks")
-    else:
-        reply['message']="Hi!! Book an Appointment"
-        return render(request,"bot.html",{"response":reply})
+    
+    def get(self,request,format=None):
+        return HttpResponse("Hi!! Book an Appointment")
 
-
-
+@require_http_methods(["POST"])
 @csrf_exempt
 def cancelappointment(request):
     patname=request.POST.get('patname')

@@ -23,6 +23,9 @@ def getdocbyid(docid):
 
 def createdoc(docname,spec):
     newdoc=Doctors(doc_name=docname,specialization=spec)
+    for doc in doctors:
+        if docname.lower()==(doc.doc_name).lower():
+            return "Doctor with the given name is present"
     newdoc.save()
     return "New doctor added with name:"+newdoc.doc_name
 
@@ -31,7 +34,7 @@ def deletedoc(docname):
     print(type(doctor))
     if not doctor:
         return "No doctor found"
-    bookstats=BookingStatus.objects.filter(doc=doctor.doc_id).delete()
+    BookingStatus.objects.filter(doc=doctor.doc_id).delete()
     doctor.delete()
     return "doctor deleted"
 

@@ -1,17 +1,25 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from bot.calendarevents import getfuncval
+from bot.services.calendarevents import getfuncval
 from django.db import connection
+<<<<<<< HEAD
 <<<<<<< HEAD
 
 from bot.services.docservice import getdocbyname,getdocbyid,deletedoc,getdoctors,createdoc,docslots
 =======
 from bot.servicefold.docservice import getdocbyname,getdocbyid,deletedoc,getdoctors,createdoc,docslots
 >>>>>>> d9351ad31fb6243b301f529ff1e89d93d55044aa
+=======
+
+from bot.services.docservice import getdocbyname,getdocbyid,deletedoc,getdoctors,createdoc
+from bot.services.slotsservice import slotscount,getslots,docslots
+>>>>>>> branch5bot
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta
 import logging
+import jsonify
+import json
 import datefinder
 
 logger=logging.getLogger(__name__)
@@ -25,36 +33,40 @@ def index(request):
 # get all available doctors
 def alldocs(request):
 <<<<<<< HEAD
+<<<<<<< HEAD
 =======
     reply={}
 >>>>>>> d9351ad31fb6243b301f529ff1e89d93d55044aa
+=======
+>>>>>>> branch5bot
     doctors=[]
     temp=getdoctors()
+    # print(temp)
     for doc in temp:
-        doctors.append(doc.doc_name)
+        doctors.append(doc.doc_name+" ")
     return HttpResponse(doctors)
 
 # get available slots by doctor name
-@require_http_methods(["POST"])
-@csrf_exempt
-def slotsbydoc(request):
-    if request.method=='POST':
-        docname=request.POST.get('docname')
-        # doctorid=docid(docname)
-        doc=getdocbyname(docname)
-        if doc=="":
-            logger.error("Error:Doctor name not found")
-            return HttpResponse("Doctor name not found")
-        else:
-            newslots=[]
-            slots=docslots(doc.doc_id)
-            for slot in slots:
-                date=slot[0]
-                time=slot[1]
-                datetime=str(date)+","+time+";  "
-                newslots.append(datetime)
-            return HttpResponse(newslots)
-    return HttpResponse("Doctor name")
+# @require_http_methods(["POST"])
+# @csrf_exempt
+# def slotsbydoc(request):
+#     if request.method=='POST':
+#         docname=request.POST.get('docname')
+#         # doctorid=docid(docname)
+#         doc=getdocbyname(docname)
+#         if doc=="":
+#             logger.error("Error:Doctor name not found")
+#             return HttpResponse("Doctor name not found")
+#         else:
+#             newslots=[]
+#             slots=docslots(doc.doc_id)
+#             for slot in slots:
+#                 date=slot[0]
+#                 time=slot[1]
+#                 datetime=str(date)+","+time+";  "
+#                 newslots.append(datetime)
+#             return HttpResponse(newslots)
+#     return HttpResponse("Doctor name")
 
 @require_http_methods(["GET","POST"])
 def doctorslots(request,docname):
@@ -86,6 +98,7 @@ def deletedoctor(request,docname):
 @require_http_methods(["POST"])
 @csrf_exempt
 def adddoctor(request):
+    # print(request.data['docname'])
     docname=request.POST.get('docname')
     spec=request.POST.get('spec')
     msg=createdoc(docname.lower(),spec)

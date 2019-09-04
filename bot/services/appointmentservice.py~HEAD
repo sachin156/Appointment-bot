@@ -6,6 +6,7 @@ cursor=connection.cursor()
 
 def bookappointment(doc,slotid,status,userday,pat):
     bookstats=BookingStatus(doc=doc,slot=slotid,status='Y',book_date=userday,pat=pat)
+    # check if the same patient have
     bookstats.save()
     return "Appointment created on:" + str(bookstats.book_date) + "with booking id:" + str(bookstats.book_id)
 
@@ -43,6 +44,3 @@ def GetSlot(slotid):
     return slots
 
 
-
-
-#\\\ef getdoc

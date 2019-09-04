@@ -1,4 +1,7 @@
-from bot.models import Doctors,Slots,BookingStatus
+# from bot.modelsdb.appointmentmodels import BookingStatus,Slots
+# from bot.modelsdb.doctormodels import Doctors
+# from bot.modelsdb.patientmodels import Patients
+from bot.models import Doctors,BookingStatus
 from django.db import connection
 
 cursor=connection.cursor()
@@ -23,15 +26,11 @@ def getdocbyid(docid):
 
 def createdoc(docname,spec):
     newdoc=Doctors(doc_name=docname,specialization=spec)
-    for doc in doctors:
-        if docname.lower()==(doc.doc_name).lower():
-            return "Doctor with the given name is present"
     newdoc.save()
     return "New doctor added with name:"+newdoc.doc_name
 
 def deletedoc(docname):
     doctor=Doctors.objects.get(doc_name=docname)
-    print(type(doctor))
     if not doctor:
         return "No doctor found"
     BookingStatus.objects.filter(doc=doctor.doc_id).delete()
