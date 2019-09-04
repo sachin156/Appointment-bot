@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from bot.calendarevents import getfuncval
+from bot.services.calendarevents import getfuncval
 from django.db import connection
 
 from bot.services.docservice import getdocbyname,getdocbyid,deletedoc,getdoctors,createdoc

@@ -2,7 +2,7 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.db import connection
 
-from bot.calendarevents import getfuncval
+from bot.services.calendarevents import getfuncval
 from bot.services.appointmentservice import getbookstatus
 from bot.services.slotsservice import slotscount,getslots,docslots
 from bot.services.docservice import getdocbyname,getdocbyid
