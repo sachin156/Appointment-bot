@@ -1,6 +1,5 @@
 from django.db import models
 
-# Create your models here.
 
 class BookingStatus(models.Model):
     book_id = models.AutoField(primary_key=True)
@@ -14,8 +13,19 @@ class BookingStatus(models.Model):
         managed = False
         db_table = 'booking_status'
 
-
 class Doctors(models.Model):
+
+    def __init__(self,doc_id,doc_name,specialization):
+        # self.doc_id=None
+        self.doc_name=None
+        self.specialization=None
+    
+    def setDocname(self,doc_name):
+        self.doc_name=doc_name
+    
+    def setSpecilization(self,specilization):
+        self.specialization=specilization
+
     doc_id = models.AutoField(primary_key=True)
     doc_name = models.CharField(max_length=20)
     specialization = models.CharField(max_length=30)
@@ -29,8 +39,7 @@ class Patients(models.Model):
     pid = models.AutoField(primary_key=True)
     name = models.CharField(max_length=20)
     contact = models.IntegerField()
-    patcontact = models.IntegerField() # temp field 
-
+   
     class Meta:
         managed = False
         db_table = 'patients'

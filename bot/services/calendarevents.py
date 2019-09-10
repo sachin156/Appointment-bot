@@ -4,7 +4,7 @@ import pickle
 from apiclient.discovery import build
 import dateparser
 from datetime import datetime,timedelta
-from .models import Doctors,Slots,BookingStatus
+from bot.models import Doctors,Slots,BookingStatus
 import smtplib
 
 

@@ -2,6 +2,7 @@
 # from bot.modelsdb.doctormodels import Doctors
 # from bot.modelsdb.patientmodels import Patients
 from bot.models import Doctors,Slots,BookingStatus,Patients
+# from bot.modelsA import Doctors,Patients
 from django.db import connection
 
 cursor=connection.cursor()
@@ -16,12 +17,16 @@ def getbookstatus(pid):
     patstatus=BookingStatus.objects.filter(pat=pid)
     return patstatus
 
-def cancelappt(patname,docname):
-    patient=Patients.objects.get(name=patname)
-    doctor=Doctors.objects.get(doc_name=docname)
-    BookingStatus.objects.filter(pat=patient.pid,doc=doctor.doc_id).delete()
+def cancelappt(bookid):
+    booking=BookingStatus.objects.get(book_id=bookid)
+    booking.delete()
     return "Appointment cancelled"
 
 def apptbydoc(docname):
     bookings=BookingStatus.objects.filter(doc_name=docname)
     return bookings
+
+def getbookings():
+    return "bookings"
+
+# class apppointment():

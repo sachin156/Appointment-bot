@@ -1,6 +1,6 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
-from bot.calendarevents import getfuncval
+from bot.services.calendarevents import getfuncval
 from django.db import connection
 
 from bot.services.appointmentservice import bookappointment,getbookstatus,cancelappt,apptbydoc
@@ -14,8 +14,7 @@ import logging
 import datefinder
 
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from rest_framework import status
+from django.http import QueryDict
 
 logger=logging.getLogger(__name__)
 
@@ -64,17 +63,23 @@ class AppointmentView(APIView):
                 return HttpResponse("Appointment not created,select from other timings")
             else:
                 slotid=getslots(usertime)
-                bookappointment(doc,slotid,"Y",userday,pat)
+                msg=bookappointment(doc,slotid,"Y",userday,pat)
                 getfuncval(newtext)
-            return HttpResponse("Appointment in process, Thanks")
+            return HttpResponse(msg)
     
     def get(self,request,format=None):
+        logger.info("Will fetch all the Appointments on the day")
+        # print(datetime.now()[0])
         return HttpResponse("Hi!! Book an Appointment")
-
-@require_http_methods(["POST"])
-@csrf_exempt
-def cancelappointment(request):
-    patname=request.POST.get('patname')
-    docname=request.POST.get('docname')
-    msg=cancelappt(patname,docname)
-    return HttpResponse(msg)
+    
+    def delete(self,request,bookid,format=None):
+        msg=cancelappt(bookid)
+        return HttpResponse(msg)
+        
+# @require_http_methods(["POST"])
+# @csrf_exempt
+# def cancelappointment(request):
+#     patname=request.POST.get('patname')
+#     docname=request.POST.get('docname')
+#     msg=cancelappt(patname,docname)
+#     return HttpResponse(msg)

@@ -3,6 +3,14 @@ from django.db import models
 # Create your models here.
 
 class BookingStatus(models.Model):
+
+    def __init__(self,book_id,doc,slot,book_date,status,pat):
+        self.book_id=book_id
+        self.doc=doc
+        self.slot=slot
+        self.book_date=book_date
+        self.status=status
+        self.pat=pat
     book_id = models.AutoField(primary_key=True)
     doc = models.ForeignKey('Doctors', models.DO_NOTHING, blank=True, null=True)
     slot = models.ForeignKey('Slots', models.DO_NOTHING, blank=True, null=True)

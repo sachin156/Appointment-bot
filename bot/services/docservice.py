@@ -1,7 +1,10 @@
 # from bot.modelsdb.appointmentmodels import BookingStatus,Slots
 # from bot.modelsdb.doctormodels import Doctors
 # from bot.modelsdb.patientmodels import Patients
-from bot.models import Doctors,BookingStatus
+# from bot.models import Doctors,BookingStatus
+# from bot.models import Slots,BookingStatus
+# from bot.modelsA import Doctors,Patients
+from bot.models import Doctors,Slots,BookingStatus,Patients
 from django.db import connection
 
 cursor=connection.cursor()
