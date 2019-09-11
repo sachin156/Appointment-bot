@@ -1,32 +1,36 @@
-from django.db import models
+from django.db import connection
 
-# Create your models here.
+class BookingStatus():
 
-class BookingStatus(models.Model):
+    def __init__(self):
+        # self.book_id=None  Auto  Increment 
+        self.doc_id=None
+        self.slot_id=None
+        self.book_date=None
+        self.status=None
+        self.pat_id=None
+        self.cursor=connection.cursor()
 
-    def __init__(self,book_id,doc,slot,book_date,status,pat):
-        self.book_id=book_id
-        self.doc=doc
-        self.slot=slot
-        self.book_date=book_date
-        self.status=status
-        self.pat=pat
-    book_id = models.AutoField(primary_key=True)
-    doc = models.ForeignKey('Doctors', models.DO_NOTHING, blank=True, null=True)
-    slot = models.ForeignKey('Slots', models.DO_NOTHING, blank=True, null=True)
-    book_date = models.DateField()
-    status = models.CharField(max_length=255, blank=True, null=True)
-    pat = models.ForeignKey('Patients', models.DO_NOTHING, blank=True, null=True)
-
-    class Meta:
-        managed = False
-        db_table = 'booking_status'
-
-
-class Slots(models.Model):
-    slot_id = models.IntegerField(primary_key=True)
-    slot_time = models.CharField(max_length=10)
-
-    class Meta:
-        managed = False
-        db_table = 'slots'
+    def insert(self,docid,bookdate,status,patid):
+        insert_stmt = (
+        "INSERT INTO booking_status (doc_id,slot_id,book_date,status,pat_id) "
+        "VALUES (%s, %s,%s, %s,%s)"
+        )
+        data = (docid,bookdate,status,patid)
+        return self.cursor.execute(insert_stmt, data)
+    
+    # def getDoctors(self):
+    #     select_stmt = "SELECT doc_name,specialization FROM doctors"
+    #     self.cursor.execute(select_stmt)
+    #     return self.cursor.fetchall()
+    
+    def delete(self,doc_name):
+        delet_stmt="""DELETE from doctors where doc_name=%s"""
+        doc_name=doc_name
+        return self.cursor.execute(delet_stmt, (doc_name,))
+    
+    # def getdocbyname(self,doc_name):
+    #     select_stmt="""SELECT from doctors where doc_name=%s"""
+    #     doc_name=doc_name
+    #     return self.cursor.execute(select_stmt,(doc_name,))
+         
