@@ -10,7 +10,6 @@ class PatService():
         self.patmap=Patients()
     
     def getpatients(self):
-        # patientsall=Patients.objects.all()
         patientsall=self.patmap.getPatients()
         return patientsall
 
@@ -22,22 +21,13 @@ class PatService():
             return "Record Not added"
 
     def delpat(self,patname):
-        # patient=Patients.objects.get(name=patname)
-        # if not patient:
-        #     return "No Patient found"
-        # BookingStatus.objects.filter(pat=patient.pid).delete()
-        # patient.delete()
         msg=self.patmap.delete([patname])
         if msg==1:
             return "Patinet with record name:"+patname+"deleted"
         else:
             return "Record not deleted."
 
-    # def getpatientbyname(self,patname):
-    #     patients=getpatients()
-    #     for pat in patients:
-    #         if patname.lower()==(pat.name).lower():
-    #             return pat
-    #     return "" 
-
-  
+    def getpatientbyname(self,patname):
+        msg=self.patmap.getpatbyname(patname)
+        patid=msg[0][0]
+        return patid

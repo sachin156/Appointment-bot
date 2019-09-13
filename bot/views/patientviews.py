@@ -2,10 +2,6 @@ from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from django.db import connection
 from bot.services.calendarevents import getfuncval
-# from bot.services.appointmentservice import getbookstatus
-from bot.services.slotsservice import GetSlot
-# from bot.services.docservice import getdocbyid
-# from bot.services.patientser import getpatientbyname,getpatients,delpat,addpat
 from bot.services.patientser import PatService
 
 from django.views.decorators.http import require_http_methods

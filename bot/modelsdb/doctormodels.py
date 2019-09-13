@@ -26,9 +26,9 @@ class Doctors():
         return self.cursor.execute(delet_stmt, (doc_name,))
     
     def getdocbyname(self,doc_name):
-        select_stmt="""SELECT from doctors where doc_name=%s"""
-        doc_name=doc_name
-        return self.cursor.execute(select_stmt,(doc_name,))
+        select_stmt="""SELECT doc_id from doctors where doc_name=%s"""
+        self.cursor.execute(select_stmt,(doc_name,))
+        return self.cursor.fetchall()
          
 
 

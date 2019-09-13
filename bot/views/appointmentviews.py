@@ -4,7 +4,7 @@ from bot.services.calendarevents import getfuncval
 from django.db import connection
 
 # from bot.services.appointmentservice import bookappointment,getbookstatus,getappointment,cancelappt,apptbydoc
-from bot.services.slotsservice import slotscount,getslots,docslots
+# from bot.services.slotsservice import slotscount,getslots,docslots
 from bot.services.appointmentservice import AppService
 # from bot.services.docservice import getdocbyname
 # from bot.services.patientser import getpatientbyname
@@ -38,6 +38,7 @@ class AppointmentView(APIView):
         matches=list(datefinder.find_dates(newtext))
         if len(matches)==0:
             logger.error("Error:No Date and time")
+            return HttpResponse("Appointment not created,select from other timings")
         else:
             start_time=matches[0]
             userday=str(start_time).split(" ")[0]
@@ -50,42 +51,11 @@ class AppointmentView(APIView):
         # logger.info("Information of doctor and patient")
         docname=request.POST.get('docname')
         patname=request.POST.get('patname')
-
-        # # call doctor service in docservice..
-        # doc="getdocbyname(docname)"
-        # pat="getpatientbyname(patname)"
-        # if doc=="" or pat=="":
-        #     logger.error("Error:Doctor or patient name not found")
-        #     return HttpResponse("Appointment not created")
-        # else:
-        msg=self.AppSer.bookappointment(docname,usertime,"Y",userday,patname)
-        # doctor_id=doc.doc_id
-        # flag=0
-        # flag=slotscount(userday,usertime,doctor_id)
-        # if flag>0:
-        #     logger.warning("Try other date and time")
-        #     return HttpResponse("Appointment not created,select from other timings")
-        # else:
-        #     slotid=getslots(usertime)
-        #     msg=bookappointment(doc,slotid,"Y",userday,pat)
-        #     getfuncval(newtext)
+        msg=self.AppSer.bookappointment(docname,usertime,"Y",userday,patname,newtext)
         return HttpResponse(msg)
-    
-    # def get(self,request,patname,format=None):
-    #     logger.info("Will fetch all the Appointments for the patient")
-    #     print(patname.lower())
-    #     msg=getappointment(patname.lower())
-    #     # iterate over the msg 
-    #     return HttpResponse(msg)
-    
-    # def delete(self,request,bookid,format=None):
-    #     msg=cancelappt(bookid)
-    #     return HttpResponse(msg)
+
+    def delete(self,request,bookid,format=None):
+        print(bookid)
+        msg=self.AppSer.cancelappt(bookid)
+        return HttpResponse(msg)
         
-# @require_http_methods(["POST"])
-# @csrf_exempt
-# def cancelappointment(request):
-#     patname=request.POST.get('patname')
-#     docname=request.POST.get('docname')
-#     msg=cancelappt(patname,docname)
-#     return HttpResponse(msg)

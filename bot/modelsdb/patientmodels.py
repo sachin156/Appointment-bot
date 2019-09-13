@@ -25,11 +25,10 @@ class Patients():
         name=name
         return self.cursor.execute(delet_stmt, (name,))
     
-    def getpatbname(self,name):
-        select_stmt="""SELECT from patients where name=%s"""
-        name=name
-        return self.cursor.execute(select_stmt,(name,))
-         
+    def getpatbyname(self,patname):
+        select_stmt="""SELECT pid from patients where name=%s"""
+        self.cursor.execute(select_stmt,(patname,))
+        return self.cursor.fetchall()
 
 
         
