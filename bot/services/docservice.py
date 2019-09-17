@@ -1,5 +1,5 @@
-from bot.models import Doctors,Slots,BookingStatus,Patients
-from bot.modelsdb.doctormodels import Doctors
+# from bot.Dao.modelsdb. import Doctors,Slots,BookingStatus,Patients
+from bot.Dao.doctors import DoctorsDao
 from django.db import connection
 cursor=connection.cursor()
 
@@ -7,7 +7,7 @@ cursor=connection.cursor()
 class DocService():
 
     def __init__(self):
-        self.DocMap=Doctors()
+        self.DocMap=DoctorsDao()
         
 
     def createdoc(self,docname,spec):

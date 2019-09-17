@@ -1,4 +1,4 @@
-from bot.modelsdb.appointmentmodels import Appointment
+from bot.Dao.appointments import AppointmentDao
 # from bot.services.slotsservice import 
 from .docservice import DocService
 from .patientser import PatService
@@ -13,7 +13,7 @@ cursor=connection.cursor()
 class AppService():
 
     def __init__(self):
-        self.BookMap=Appointment()
+        self.BookMap=AppointmentDao()
         self.DocSer=DocService()
         self.PatSer=PatService()
         self.SlotSer=SlotService()

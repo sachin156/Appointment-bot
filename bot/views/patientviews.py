@@ -36,7 +36,8 @@ class PatientView(APIView):
     def post(self,request,format=None):
         pname=request.POST.get('patname')
         contact=request.POST.get('contact')
-        msg=self.PatSer.addpat(pname,contact)
+        email=request.POST.get('Email')
+        msg=self.PatSer.addpat(pname,contact,email)
         return HttpResponse(msg)
     
     def delete(self,request,patname,format=None):

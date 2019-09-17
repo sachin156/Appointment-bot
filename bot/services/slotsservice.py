@@ -1,12 +1,11 @@
 from bot.models import Doctors,Slots,BookingStatus,Patients
 from django.db import connection
-from bot.modelsdb.slotmodels import Slots
-cursor=connection.cursor()
+from bot.Dao.slots import SlotsDao
 
 class SlotService():
     
     def __init__(self):
-        self.SlotMap=Slots()
+        self.SlotMap=SlotsDao()
     
     def getslots(self,usertime):
         # slots=Slots.objects.get(slot_time=usertime)
