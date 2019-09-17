@@ -31,6 +31,7 @@ class AppService():
             return "Select from othet timings"
         flag=0
         flag=self.SlotSer.slotscount(userday,usertime,docid)
+        
         if flag>0:
             logger.warning("Try other date and time")
             slots=self.SlotSer.docslots(docid)

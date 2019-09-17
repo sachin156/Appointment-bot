@@ -26,10 +26,6 @@ class PatientView(APIView):
     
     def get(self,request,format=None):
         allpatients=self.PatSer.getpatients()
-        # allpatients=getpatients()
-        # patientdetails=[]
-        # for patient in allpatients:
-        #     patientdetails.append(patient.name+""+str(patient.pid)+" ")
         return HttpResponse(allpatients)
 
     @csrf_exempt

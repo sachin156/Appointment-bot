@@ -22,8 +22,6 @@ class SlotService():
         return count
 
     def docslots(self,doctor_id):
-        # cursor.execute("SELECT DISTINCT b.book_date,s.slot_time FROM slots s INNER JOIN booking_status b on b.slot_id!=s.slot_id and s.slot_id not in(SELECT slot_id FROM booking_status where doc_id=%s)",[doctor_id])
-        # slots=cursor.fetchall()
         slots=self.SlotMap.docslots(doctor_id)
         newslots=[]
         for slot in slots:

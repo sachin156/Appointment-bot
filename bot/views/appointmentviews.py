@@ -53,6 +53,8 @@ class AppointmentView(APIView):
         patname=request.POST.get('patname')
         msg=self.AppSer.bookappointment(docname,usertime,"Y",userday,patname,newtext)
         return HttpResponse(msg)
+    
+    
 
     def delete(self,request,bookid,format=None):
         print(bookid)
