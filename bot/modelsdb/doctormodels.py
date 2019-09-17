@@ -1,10 +1,14 @@
-from django.db import models
+from django.db import connection
+       
+class Doctors():
 
-class Doctors(models.Model):
-    doc_id = models.AutoField(primary_key=True)
-    doc_name = models.CharField(max_length=20)
-    specialization = models.CharField(max_length=30)
+    def __init__(self):
+        self.doc_id=None
+        self.doc_name = None
+        self.specialization =None
+        self.cursor=connection.cursor()
+         
 
-    class Meta:
-        managed = False
-        db_table = 'doctors'
+
+        
+

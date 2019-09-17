@@ -30,9 +30,9 @@ def create_event(new_event):
     if already_exists(new_event):
         return event_suggest()
     else:
-        events_result = service.events().list(calendarId=calendar_id, timeMin=now,
-                                                       maxResults=500, singleEvents=True,
-                                                       orderBy='startTime').execute()
+        # events_result = service.events().list(calendarId=calendar_id, timeMin=now,
+        #                                                maxResults=500, singleEvents=True,
+        #                                                orderBy='startTime').execute()
         # events=events_result['items']
         # event_id=""
         # date=new_event['start']['dateTime']+'+05:30'
@@ -43,7 +43,7 @@ def create_event(new_event):
         # if event_id=="":
         #     return event_suggest()
         # else:
-        # service.events().insert(calendarId=calendar_id, body=new_event).execute()
+        service.events().insert(calendarId=calendar_id, body=new_event).execute()
         # server = smtplib.SMTP('smtp.gmail.com', 587)
         # server.starttls()
         # server.login("sachin.vadlakonda@imaginea.com")
@@ -77,8 +77,6 @@ def update_event(newevent,event_id):
     updated_event = service.events().update(calendarId=calendar_id, eventId=event['id'], body=event).execute()
     replies['decision']='True'
     replies['message']='Appointment created,Thanks'
-    doctors=Doctors.objects.all()
-    print(doctors)
     return replies
 
 # check if the event exist before
