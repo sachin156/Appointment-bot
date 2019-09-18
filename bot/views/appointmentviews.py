@@ -1,32 +1,12 @@
 from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from bot.services.calendarevents import getfuncval
-from django.db import connection
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
-from bot.services.appointmentservice import bookappointment,getbookstatus,cancelappt,slotscount,getslots,docslots,apptbydoc
-from bot.services.docservice import getdocbyname
-from bot.services.patientser import getpatientbyname
-=======
-from bot.servicefold.appointmentservice import bookappointment,getbookstatus,cancelappt,slotscount,getslots,docslots,apptbydoc
-from bot.servicefold.docservice import getdocbyname
-from bot.servicefold.patientser import getpatientbyname
->>>>>>> d9351ad31fb6243b301f529ff1e89d93d55044aa
-=======
-from bot.services.appointmentservice import bookappointment,getbookstatus,cancelappt,apptbydoc
-from bot.services.slotsservice import slotscount,getslots,docslots
-from bot.services.docservice import getdocbyname
-from bot.services.patientser import getpatientbyname
->>>>>>> branch5bot
-=======
 # from bot.services.appointmentservice import bookappointment,getbookstatus,getappointment,cancelappt,apptbydoc
 # from bot.services.slotsservice import slotscount,getslots,docslots
 from bot.services.appointmentservice import AppService
 # from bot.services.docservice import getdocbyname
 # from bot.services.patientser import getpatientbyname
->>>>>>> branch5bot
 from django.views.decorators.http import require_http_methods
 from django.views.decorators.csrf import csrf_exempt
 from datetime import datetime, timedelta

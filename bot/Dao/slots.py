@@ -2,12 +2,6 @@ from django.db import connection
 from bot.modelsdb.slotmodels import Slots
 
 class SlotsDao(Slots):
-
-    def __init__(self):
-        # self.book_id=None  Auto  Increment 
-        self.slot_id=None
-        self.slot_time=None
-        self.cursor=connection.cursor()
     
     def getslot(self,usertime):
         select_stmt = "SELECT slot_id FROM slots"
