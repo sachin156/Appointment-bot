@@ -34,7 +34,7 @@ class AppService():
         
         if flag>0:
             logger.warning("Try other date and time")
-            slots=self.SlotSer.docslots(docid)
+            slots=self.SlotSer.docslots(docname)
             return "Appointment not created,select from other timings"+" "+str(slots)
         else:
             msg=self.BookMap.insert(docid,slotid,userday,"Y",patid)

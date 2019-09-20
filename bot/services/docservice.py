@@ -26,10 +26,10 @@ class DocService():
 
     def getdocbyname(self,docname):
         msg=self.DocMap.getdocbyname(docname)
-        if not msg:
-            return ""
-        else:
+        if msg:
             docid=msg[0][0]
             return docid
+        else:
+            return ""
 
  
