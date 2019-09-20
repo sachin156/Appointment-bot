@@ -19,7 +19,8 @@ class SlotService():
         return slots
     
     def slotscount(self,userday,usertime,docid):
-        count=self.SlotMap.slotscount(userday,usertime,docid)
+        slotid=self.getslots(usertime)
+        count=self.SlotMap.slotscount(userday,slotid,docid)
         count=count[0][0]
         return count
 

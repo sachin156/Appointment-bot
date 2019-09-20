@@ -66,8 +66,9 @@ def NlpView(request):
 
     if value=='dict1':
         AppSer=AppService()
-        AppSer.bookappointment()
-        return HttpResponse("")
+        # AppSer.bookappointment()
+        # inputs of booking,doc,pat,time,slot
+        return HttpResponse("Booking Appointment for you")
 
 
 
