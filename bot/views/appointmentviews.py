@@ -35,6 +35,8 @@ class AppointmentView(APIView):
         # print(request.data.get('appointtext'))
         newtext=request.POST.get('appointtext')
         # logger.error(newtext)
+        docname=request.POST.get('docname')
+        patname=request.POST.get('patname')
         matches=list(datefinder.find_dates(newtext))
         if len(matches)==0:
             logger.error("Error:No Date and time")
@@ -43,14 +45,10 @@ class AppointmentView(APIView):
             start_time=matches[0]
             userday=str(start_time).split(" ")[0]
             usertime=start_time.strftime('%H:%M')
-
         if datetime.now()>start_time:
             logger.exception("Exception:Enter Valid Date and Time")
             return HttpResponse("Appointment not created,select from other timings")
 
-        # logger.info("Information of doctor and patient")
-        docname=request.POST.get('docname')
-        patname=request.POST.get('patname')
         msg=self.AppSer.bookappointment(docname,usertime,"Y",userday,patname,newtext)
         return HttpResponse(msg)
     

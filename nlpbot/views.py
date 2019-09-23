@@ -22,7 +22,7 @@ from bot.services.appointmentservice import AppService
 
 logger=logging.getLogger(__name__)
 
-
+# ***********
 st = StanfordNERTagger('/home/sachinv/Documents/stanford-ner/classifiers/english.all.3class.distsim.crf.ser.gz',
                         '/home/sachinv/Documents/stanford-ner/stanford-ner.jar',encoding='utf-8')
 def index(request):
@@ -42,6 +42,7 @@ def NlpView(request):
     'dict1':{'book','appointment','doctor'},
     'dict2':{'list','get','all','doctors'},
     'dict3':{'list','all','slots','doctor','get'}
+    # "dict4":{'new','patient','name','email'} To add new patient in the records
     }
     results = {}
     
@@ -50,14 +51,16 @@ def NlpView(request):
     value=max(results.items(), key=operator.itemgetter(1))[0]
     print(value)
     
+    for tag, chunk in groupby(classified_text, lambda x:x[1]):
+        if tag== "PERSON":
+            doctor=("%-12s"%tag, " ".join(w for w, t in chunk))
+            docname=doctor[1].lower()
+
     if value=='dict3':
-        for tag, chunk in groupby(classified_text, lambda x:x[1]):
-            if tag== "PERSON":
-                SlotSer=SlotService()
-                doctor=("%-12s"%tag, " ".join(w for w, t in chunk))
-                print(doctor)
-                msg=SlotSer.docslots(doctor[1].lower())
-                return HttpResponse(msg)
+        if doctor:
+            SlotSer=SlotService()
+            msg=SlotSer.docslots(docname)
+            return HttpResponse(msg)
     
     if value=='dict2':
         DocSer=DocService()
@@ -65,9 +68,14 @@ def NlpView(request):
         return HttpResponse(docs)
 
     if value=='dict1':
-        AppSer=AppService()
-        # AppSer.bookappointment()
-        # inputs of booking,doc,pat,time,slot
+        # continued conversation ??
+        matches=list(datefinder.find_dates(text))
+        start_time=matches[0]
+        userday=str(start_time).split(" ")[0]
+        usertime=start_time.strftime('%H:%M')
+        appser=AppService()
+        # patient name
+        appser.bookappointment(docname,usertime,"Y",userday,"srinu",text)
         return HttpResponse("Booking Appointment for you")
 
 
