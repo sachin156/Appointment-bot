@@ -20,10 +20,10 @@ from django.http import QueryDict
 logger=logging.getLogger(__name__)
 
 
-def index(request):
-    reply={}
-    reply['message']="Hi!! Book an Appointment"
-    return HttpResponse("Hi, Book an Appointment")
+# def index(request):
+#     reply={}
+#     reply['message']="Hi!! Book an Appointment"
+#     return HttpResponse("Hi, Book an Appointment")
 
 class AppointmentView(APIView):
     

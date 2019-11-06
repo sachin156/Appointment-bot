@@ -38,7 +38,7 @@ class AppService():
         if patid=="":
             return "Patient Name Not Found"
         if slotid=="":
-            return "Select from othet timings"
+            return "Select from other timings"
         flag=0
         flag=self.SlotSer.slotscount(userday,usertime,docid)
         
