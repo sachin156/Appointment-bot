@@ -110,36 +110,32 @@
         "text": "Book an appointment with Dr.Sandeep at 10am"
       },
       {
-        "intent": "appointment",
-        "text": "Book an appointment with Dr.Sandeep at 10am on oct 15th"
+        "intent": "doctors",
+        "text": "list all doctors"
       },
       {
-        "intent": "appointment",
-        "text": "Book an appointment"
+        "intent": "doctors",
+        "text": "get all doctors"
       },
       {
-        "intent": "appointment",
-        "text": "Book an appointment with doctor sandeep"
-      },
-      {
-        "intent": "appointment",
-        "text": "Book an appointment with doctor sandeep at 10am on oct 15th"
-      },
-      {
-        "intent": "appointment",
-        "text": "I would like to make appointment"
-      },
-      {
-        "intent": "appointment",
-        "text": "I would like to make appointment with doctor sandeep"
-      },
-      {
-        "intent": "appointment",
-        "text": "I would like to make appointment with doctor sandeep at 10am on oct 15th"
+        "intent": "doctors",
+        "text": "find all doctors"
       },
       {
         "intent": "doctors",
         "text": "list all doctors"
+      },
+      {
+        "intent": "doctors",
+        "text": "find all specialists"
+      },
+      {
+        "intent": "doctors",
+        "text": "list all doctors"
+      },
+      {
+        "intent": "doctors",
+        "text": "can show me all doctors"
       },
       {
         "intent": "doctors",
@@ -198,26 +194,6 @@
         "text": "get me all slots of doctor vijay"
       },
       {
-        "intent": "slots",
-        "text": "list all slots of doctor ali"
-      },
-      {
-        "intent": "slots",
-        "text": "list me slots of specialist rahul"
-      },
-      {
-        "intent": "slots",
-        "text": "get me all slots of doctor vijay"
-      },
-      {
-        "intent": "slots",
-        "text": "list all slots of doctor ali"
-      },
-      {
-        "intent": "slots",
-        "text": "list me slots of specialist rahul"
-      },
-      {
         "intent": "goodbye",
         "text": "bye"
       },
@@ -248,6 +224,18 @@
       {
         "intent": "goodbye",
         "text": "have a good one"
+      },
+      {
+        "intent": "None",
+        "text": "Appointment"
+      },
+      {
+        "intent": "None",
+        "text": "list"
+      },
+      {
+        "intent": "None",
+        "text": "get"
       }
     ],
     "regex_features": [
