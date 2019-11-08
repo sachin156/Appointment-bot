@@ -14,10 +14,10 @@ from django.http import QueryDict
 
 logger=logging.getLogger(__name__)
 
-def index(request):
-    reply={}
-    reply['message']="Hi!! Book an Appointment"
-    return HttpResponse("Hi, Patients Page")
+# def index(request):
+#     reply={}
+#     reply['message']="Hi!! Book an Appointment"
+#     return HttpResponse("Hi, Patients Page")
 
 class PatientView(APIView):
     

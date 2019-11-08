@@ -112,7 +112,7 @@ def new_eve(text):
     end_time=start_time+timedelta(minutes=30)
 
     event = {
-      'summary': 'Doctor Appointment',
+      'summary': 'Busy',
       'location': 'Hyderabad',
       'description': 'Appointment with the doctor',
       'start': {

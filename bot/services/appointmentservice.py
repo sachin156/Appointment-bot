@@ -6,6 +6,9 @@ from .slotsservice import SlotService
 from .calendarevents import getfuncval
 from django.db import connection
 import logging 
+
+import datefinder
+
 logger=logging.getLogger(__name__)
 
 cursor=connection.cursor()
@@ -19,26 +22,33 @@ class AppService():
         self.SlotSer=SlotService()
 
     def bookappointment(self,docname,usertime,status,userday,patname,newtext):
+        # matches=list(datefinder.find_dates(newtext))
+        # start_time=matches[0]
+        # userday=str(start_time).split(" ")[0]
+        # usertime=start_time.strftime('%H:%M')
+        # appser=AppService()
+
         docid=self.DocSer.getdocbyname(docname)
         patid=self.PatSer.getpatientbyname(patname)
         slotid=self.SlotSer.getslots(usertime)
         # ****
+
         if docid=="":
             return "Doctor Name Not Found,Select from the suggested"+str(self.DocSer.getdoctors())
         if patid=="":
             return "Patient Name Not Found"
         if slotid=="":
-            return "Select from othet timings"
+            return "Select from other timings"
         flag=0
         flag=self.SlotSer.slotscount(userday,usertime,docid)
         
         if flag>0:
             logger.warning("Try other date and time")
-            slots=self.SlotSer.docslots(docid)
-            return "Appointment not created,select from other timings"+" "+str(slots)
+            slots=self.SlotSer.docslots(docname)
+            return "Appointment not created,select from other timings" +str(slots)
         else:
             msg=self.BookMap.insert(docid,slotid,userday,"Y",patid)
-            getfuncval(newtext)
+            # getfuncval(newtext)
             return "Appointment created with booking id:"+""+ str(msg)
        
     def getbookstatus(self,pid):

@@ -1,0 +1,328 @@
+{
+  "rasa_nlu_data": {
+    "regex_features": [
+      {
+        "name": "zipcode",
+        "pattern": "[0-9]{5}"
+      },
+      {
+        "name": "appointment",
+        "pattern": "book[^\\s]*"
+      }
+    ],
+    "entity_synonyms": [
+      {
+        "value": "doctor",
+        "synonyms": ["Doctor", "doctor", "Dr","specialist"]
+      },
+      {
+        "value": "appointment",
+        "synonyms": ["Appointment", "consultation","arrangement"]
+      }
+    ],
+    "common_examples": [
+      {
+        "text": "hey", 
+        "intent": "greet", 
+        "entities": []
+      }, 
+      {
+        "text": "howdy", 
+        "intent": "greet", 
+        "entities": []
+      }, 
+      {
+        "text": "hey there",
+        "intent": "greet", 
+        "entities": []
+      }, 
+      {
+        "text": "hello", 
+        "intent": "greet", 
+        "entities": []
+      }, 
+      {
+        "text": "hi", 
+        "intent": "greet", 
+        "entities": []
+      },
+      {
+        "text": "good morning",
+        "intent": "greet",
+        "entities": []
+      },
+      {
+        "text": "good evening",
+        "intent": "greet",
+        "entities": []
+      },
+      {
+        "text": "dear sir",
+        "intent": "greet",
+        "entities": []
+      },
+      {
+        "text": "yes", 
+        "intent": "affirm", 
+        "entities": []
+      }, 
+      {
+        "text": "yep", 
+        "intent": "affirm", 
+        "entities": []
+      }, 
+      {
+        "text": "yeah", 
+        "intent": "affirm", 
+        "entities": []
+      },
+      {
+        "text": "indeed",
+        "intent": "affirm",
+        "entities": []
+      },
+      {
+        "text": "that's right",
+        "intent": "affirm",
+        "entities": []
+      },
+      {
+        "text": "ok",
+        "intent": "affirm",
+        "entities": []
+      },
+      {
+        "text": "great",
+        "intent": "affirm",
+        "entities": []
+      },
+      {
+        "text": "right, thank you",
+        "intent": "affirm",
+        "entities": []
+      },
+      {
+        "text": "correct",
+        "intent": "affirm",
+        "entities": []
+      },
+      {
+        "text": "I would like to make appointment with dermatology specialist",
+        "intent": "appointment"
+      },
+      {
+       "text": "I would like to make appointment with skin specialist",
+        "intent": "appointment"
+      },
+      {
+       "text": "I would like to make appointment with cardiology specialist",
+        "intent": "appointment"
+      },
+      {
+       "text": "I would like to make appointment with heart specialist",
+        "intent": "appointment"
+      },
+      {
+       "text": "I would like to make appointment with neurology specialist",
+        "intent": "appointment"
+      },
+      {
+       "text": "Book an appointment with Neurologist",
+        "intent": "appointment"
+      },
+      {
+        "text": "Book an appointment with Dermatologist",
+        "intent": "appointment"
+      },
+      {
+       "text": "Book an appointment with Cardiologist",
+        "intent": "appointment"
+      },
+      {
+       "text": "Book an appointment with Dr.Sandeep",
+        "intent": "appointment"
+      },
+      {
+         "text": "Book an appointment with Dr.Sandeep at 10am",
+        "intent": "appointment"
+      },
+	{
+       "text": "list all doctors",
+       "intent": "doctors",
+       "entities": []
+     },
+
+      {
+       "text": "get all doctors",
+       "intent": "doctors",
+       "entities": []
+     },
+
+	{
+       "text": "find all doctors",
+       "intent": "doctors",
+       "entities": []
+     },
+
+	{	
+       "text": "list all doctors",
+       "intent": "doctors",
+       "entities": []
+     },
+
+	{
+       "text": "find all specialists",
+       "intent": "doctors",
+       "entities": []
+     },
+
+	{
+       "text": "list all doctors",
+       "intent": "doctors",
+       "entities": []
+     },
+
+     {
+      "text": "can show me all doctors",
+      "intent": "doctors",
+      "entities": []
+    },
+
+      {
+       "text": "get all doctors",
+       "intent": "doctors",
+       "entities": []
+     },
+
+	{
+       "text": "find all doctors",
+       "intent": "doctors",
+       "entities": []
+     },
+
+	{
+       "text": "list all doctors",
+       "intent": "doctors",
+       "entities": []
+     },
+
+	{
+       "text": "find all specialists",
+       "intent": "doctors",
+       "entities": []
+     },
+
+	{
+       "text": "get me all slots of doctor vijay",
+       "intent": "slots",
+       "entities": []
+     },
+
+	{
+       "text": "list all slots of doctor ali",
+       "intent": "slots",
+       "entities": []
+     },
+
+	{
+       "text": "list me slots of specialist rahul",
+       "intent": "slots",
+       "entities": []
+     },
+{
+       "text": "get me all slots of doctor vijay",
+       "intent": "slots",
+       "entities": []
+     },
+
+{
+       "text": "list all slots of doctor ali",
+       "intent": "slots",
+       "entities": []
+     },
+
+{
+       "text": "list me slots of specialist rahul",
+       "intent": "slots",
+       "entities": []
+     },
+{
+       "text": "get me all slots of doctor vijay",
+       "intent": "slots",
+       "entities": []
+     },
+
+{
+       "text": "list all slots of doctor ali",
+       "intent": "slots",
+       "entities": []
+     },
+
+{
+       "text": "list me slots of specialist rahul",
+       "intent": "slots",
+       "entities": []
+     },
+{
+       "text": "get me all slots of doctor vijay",
+       "intent": "slots",
+       "entities": []
+     },
+      {
+        "text": "bye", 
+        "intent": "goodbye", 
+        "entities": []
+      }, 
+      {
+        "text": "goodbye", 
+        "intent": "goodbye", 
+        "entities": []
+      }, 
+      {
+        "text": "good bye", 
+        "intent": "goodbye", 
+        "entities": []
+      }, 
+      {
+        "text": "stop", 
+        "intent": "goodbye", 
+        "entities": []
+      }, 
+      {
+        "text": "end", 
+        "intent": "goodbye", 
+        "entities": []
+      },
+      {
+        "text": "farewell",
+        "intent": "goodbye",
+        "entities": []
+      },
+      {
+        "text": "Bye bye",
+        "intent": "goodbye",
+        "entities": []
+      },
+      {
+        "text": "have a good one",
+        "intent": "goodbye",
+        "entities": []
+      },
+	{
+        "text": "Appointment",
+        "intent": "None",
+        "entities": []
+      },
+	{
+        "text": "list",
+        "intent": "None",
+        "entities": []
+      },
+	{
+        "text": "get",
+        "intent": "None",
+        "entities": []
+      }
+    ]
+  }
+}

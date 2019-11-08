@@ -1,5 +1,5 @@
 from django.db import models
-
+# this file is not used 
 
 class BookingStatus(models.Model):
     book_id = models.AutoField(primary_key=True)

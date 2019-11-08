@@ -1,0 +1,8 @@
+{
+  "doctor": "doctor",
+  "dr": "doctor",
+  "specialist": "doctor",
+  "appointment": "appointment",
+  "consultation": "appointment",
+  "arrangement": "appointment"
+}
