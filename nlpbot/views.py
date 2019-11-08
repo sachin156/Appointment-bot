@@ -55,8 +55,10 @@ def NlpView(request):
 
     print("Intent of the sentence"+intent)
     if intent=='appointment':
+        matches=list(datefinder.find_dates(text))
+        if not matches:
+            return HttpResponse("Enter date and time to make the appointment")
         if doctor:
-            matches=list(datefinder.find_dates(text))
             start_time=matches[0]
             userday=str(start_time).split(" ")[0]
             usertime=start_time.strftime('%H:%M')
