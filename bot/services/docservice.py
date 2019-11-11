@@ -17,7 +17,7 @@ class DocService():
     def getdoctors(self):
         doctors=self.DocMap.getDoctors()
         # records=doctors.fetchall()
-        print(doctors)
+        # print(doctors)
         return doctors
 
     def deletedoc(self,docname):

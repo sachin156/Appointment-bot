@@ -194,6 +194,11 @@
        "entities": []
      },
 
+     {
+      "text": "get me all doctors",
+      "intent": "doctors",
+      "entities": []
+    },
 	{
        "text": "find all doctors",
        "intent": "doctors",

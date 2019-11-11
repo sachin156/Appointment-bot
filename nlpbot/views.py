@@ -51,13 +51,22 @@ def NlpView(request):
             doctor=("%-12s"%tag, " ".join(w for w, t in chunk))
             docname=doctor[1].lower()
    
-    print(doctor)
+    # print(doctor)
+    # print("Intent of the sentence"+intent)
 
-    print("Intent of the sentence"+intent)
+    # Book an appointment  intent
     if intent=='appointment':
         matches=list(datefinder.find_dates(text))
         if not matches:
             return HttpResponse("Enter date and time to make the appointment")
+        else:
+            start_time=matches[0]
+            userday=str(start_time).split(" ")[0]
+            usertime=start_time.strftime('%H:%M')
+
+        if datetime.now()>start_time:
+            logger.exception("Exception:Enter Valid Date and Time")
+            return HttpResponse("Appointment not created,select from other timings")
         if doctor:
             start_time=matches[0]
             userday=str(start_time).split(" ")[0]
@@ -69,30 +78,17 @@ def NlpView(request):
         else:
             return HttpResponse("Select any doctor from the suggested:"+str(doctors))
 
-    # tokenized_text = (word_tokenize(text))
-    # ner tagging 
-    # classified_text = st.tag(tokenized_text)
-    # # removing stop words 
-    # stop_words= set(stopwords.words('english'))
-    # filtered_sentence=[word for word in tokenized_text if word not in stop_words]
-    # print(filtered_sentence)
-    # # pos tagging..
-    # print(nltk.pos_tag(tokenized_text))
-    # print(classified_text)
-    # sentence = set(text.split())
-    
- 
-   
-
-    if intent =='slots':
+    # Slots intent
+    elif intent =='slots':
         if doctor:
             SlotSer=SlotService()
             msg=SlotSer.docslots(docname)
             return HttpResponse(msg)
         else:
             return HttpResponse("Select any doctor from the suggested:"+str(doctors))
-            
-    if intent=='doctors':
+    
+    # Doctors intent
+    elif intent=='doctors':
         return HttpResponse(doctors)
 
 

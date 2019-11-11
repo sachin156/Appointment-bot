@@ -26,7 +26,6 @@ class SlotService():
 
     def docslots(self,docname):
         docid=self.DocSer.getdocbyname(docname)
-        print(docid)
         if docid=="":
             return "Select from suggested doctors"+str(self.DocSer.getdoctors())
         slots=self.SlotMap.docslots(docid)
