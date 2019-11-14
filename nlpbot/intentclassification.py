@@ -4,6 +4,10 @@ from rasa_nlu.model import Trainer
 from rasa_nlu import config
 from rasa_nlu.model import Metadata, Interpreter
 
+# from bot.services.appointmentservice import AppService
+# from bot.services.slotsservice import SlotService
+# from bot.services.docservice import DocService
+
 
 
 # ********training the model**********
@@ -18,6 +22,8 @@ from rasa_nlu.model import Metadata, Interpreter
 
 
 interpreter = Interpreter.load('./models/default/appointmentbot')
+# print("hello")
+
 def getintent(text):
     intentname=interpreter.parse(text)
     return intentname['intent']['name']
