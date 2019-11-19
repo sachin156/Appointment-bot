@@ -29,3 +29,6 @@ def getintent(text):
     # print(intentname)
     return intentname
 
+# text=input("Input")
+# print(text)
+

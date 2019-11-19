@@ -1,9 +1,9 @@
-from django.shortcuts import render,redirect
+# from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from bot.services.calendarevents import getfuncval
 
 from django.views.decorators.csrf import csrf_exempt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,date
 import logging
 import string
 import datefinder
@@ -61,12 +61,15 @@ def doctorschat(intentval):
 def slotschat(text):
     docname=getentities(text)
     matches=getdateandtime(text)
+    if not matches:
+        matches=date.today().strftime("%Y-%m-%d")
+        print(matches)
     while True:
         # get me all slots of doctor vijay on 20th November 10AM
         print(docname,matches)
-        if docname:
+        if docname and matches:
             SlotSer=SlotService()
-            msg=SlotSer.docslots(docname)
+            msg=SlotSer.docslots(matches,docname)
             print("Bot:"+str(msg))
             break
         elif not docname:

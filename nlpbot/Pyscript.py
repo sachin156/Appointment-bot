@@ -1,9 +1,9 @@
-from django.shortcuts import render,redirect
+# from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from bot.services.calendarevents import getfuncval
 
 from django.views.decorators.csrf import csrf_exempt
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta,date
 import logging
 import string
 import datefinder
@@ -11,9 +11,15 @@ from itertools import groupby
 import operator
 
 import nltk
+from nltk.stem.snowball import SnowballStemmer 
+stemmer=SnowballStemmer("english")
+
 from nltk.tag.stanford import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+
+# import spacy
+# nlp=spacy.load('en_sm')
 
 from bot.services.slotsservice import SlotService
 from bot.services.docservice import DocService
@@ -31,103 +37,132 @@ def index(request):
     reply['message']="Hi!! Book an Appointment"
     return HttpResponse("Hi, Book an Appointment")
 
-@csrf_exempt
-def NlpView(request):
-    text=request.POST.get('appointtext')
-    # get intent from rasa
-    intent=getintent(text)
 
-    tokenized_text = (word_tokenize(text.title()))
-    # ner tagging 
-    classified_text = st.tag(tokenized_text)
+DocSer=DocService()
+SlotSer=SlotService()
+doctors=DocSer.getdoctors()
 
-       # # objs for service classes....
+def doctorschat(intentval):
+    # docname=getentities(ques)   department
+    # intentval is department
+    print(intentval)
     DocSer=DocService()
-    doctors=DocSer.getdoctors()
+    if not intentval:
+        doctors=DocSer.getdoctors()
+        return doctors
+    else:
+        spec=stemmer.stem(intentval)
+        # print(se )
+        doctors=DocSer.getdocbydep(spec)
+        return doctors
+        # print(spec)
+    
 
-    doctor=""
-    for tag, chunk in groupby(classified_text, lambda x:x[1]):
+def slotschat(text):
+    docname=getentities(text)
+    matches=getdateandtime(text)
+    if not matches:
+        print(date.today())
+        matches=date.today().strftime("%Y-%m-%d")
+        print(matches)
+    while True:
+        # get me all slots of doctor vijay on 20th November 10AM
+        print(docname,matches)
+        if docname and matches:
+            SlotSer=SlotService()
+            msg=SlotSer.docslots(matches,docname)
+            print("Bot:"+str(msg))
+            break
+        elif not docname:
+            print("Bot:Enter any doctor name")
+            text=getinput()
+            docname=getentities(text)
+        # elif not matches:
+        #     print("Bot:Enter date and time")
+        #     text=getinput()
+        #     matches=getdateandtime(text)
+    print("Bot:Do you want to proceed for appointment?")
+    confir=getinput()
+    if confir=="yes":
+        print("Bot:select time for the appointment")
+        matches=getinput()
+        msg=appointmentchat(str(docname)+" "+"on"+" "+str(matches))
+    else:
+        msg="Ok,Do you want see another doctor?"
+    return (msg)
+
+def appointmentchat(text):
+    docname=getentities(text)
+    print(docname)
+    start_time=getdateandtime(text)
+    print(docname,start_time)
+    while True:
+        if docname and start_time:
+            # start_time=matches[0]
+            if datetime.now()>start_time:
+                print("Bot:Appointment not created,select from other timings")
+            else:
+                userday=str(start_time).split(" ")[0]
+                usertime=start_time.strftime('%H:%M')
+                appser=AppService()
+                msg=appser.bookappointment(docname,usertime,"Y",userday,"srinu",text)
+                return msg
+        elif not docname:
+            print("Bot:Enter any doctor name")
+            text=getinput()
+            docname=getentities(text)
+        elif not start_time:
+            print("Bot:Enter date and time")
+            text=getinput()
+            start_time=getdateandtime(text)      
+
+
+# **************************
+def getentities(text):
+    doctor_name=""
+    r=st.tag(text.title().split())
+    for tag, chunk in groupby(r, lambda x:x[1]):
         if tag== "PERSON":
             doctor=("%-12s"%tag, " ".join(w for w, t in chunk))
-            docname=doctor[1].lower()
-   
-    
+            doctor_name=doctor[1]
+    return doctor_name
 
-    # Book an appointment  intent
-    if intent=='appointment':
-        matches=list(datefinder.find_dates(text))
-        if not matches:
-            return HttpResponse("Enter date and time to make the appointment")
+
+def getdateandtime(text):
+    matches=list(datefinder.find_dates(text))
+    if not matches:
+        return None
+    else:
+        return matches[0]
+
+def getinput():
+    text=input("User:")
+    return text
+
+# *****************************
+
+
+
+while True:
+    # print("User:")
+    ques=getinput()
+    intent_struc=getintent(ques)
+    intent=intent_struc['intent']['name']
+    print(intent)
+    if intent=="goodbye":
+        print("Bye")
+        break
+    elif intent=="doctors":
+        intent_val=""
+        if intent_struc['entities']:
+            intent_val=intent_struc['entities'][0]['value']
+            response=doctorschat(intent_val)
         else:
-            start_time=matches[0]
-            userday=str(start_time).split(" ")[0]
-            usertime=start_time.strftime('%H:%M')
+            response=doctorschat(intent_val)
+    elif intent=="appointment":
+        response=appointmentchat(ques)
+    elif intent=="slots":
+        response=slotschat(ques)
+    # elif intent=="greet":
 
-        if datetime.now()>start_time:
-            logger.exception("Exception:Enter Valid Date and Time")
-            return HttpResponse("Appointment not created,select from other timings")
-        if doctor:
-            start_time=matches[0]
-            userday=str(start_time).split(" ")[0]
-            usertime=start_time.strftime('%H:%M')
-            appser=AppService()
-            # patient name
-            msg=appser.bookappointment(docname,usertime,"Y",userday,"srinu",text)
-            return HttpResponse(msg)
-        else:
-            return HttpResponse("Select any doctor from the suggested:"+str(doctors))
-
-    # Slots intent
-    elif intent =='slots':
-        if doctor:
-            SlotSer=SlotService()
-            msg=SlotSer.docslots(docname)
-            return HttpResponse(msg)
-        else:
-            return HttpResponse("Select any doctor from the suggested:"+str(doctors))
-    
-    # Doctors intent
-    elif intent=='doctors':
-        return HttpResponse(doctors)
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    print("Bot:"+str(response))
