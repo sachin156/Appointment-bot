@@ -108,11 +108,25 @@
       },
       {
         "text": "I would like to make appointment with dermatology specialist",
-        "intent": "appointment"
+        "intent": "appointment",
+	"entities": [
+          {
+            "start": 39,
+            "end": 51,
+            "value": "dermatology",
+            "entity": "department"
+          }
+	]
       },
       {
        "text": "I would like to make appointment with skin specialist",
-        "intent": "appointment"
+        "intent": "appointment",
+	"entities": [{
+            "start": 39,
+            "end": 43,
+            "value": "dermatology",
+            "entity": "department"
+          }]
       },
       {
        "text": "I would like to make appointment with cardiology specialist",
@@ -190,25 +204,21 @@
 
       {
        "text": "get all doctors",
-       "intent": "doctors",
-       "entities": []
+       "intent": "doctors"
      },
 
      {
       "text": "get me all doctors",
-      "intent": "doctors",
-      "entities": []
+      "intent": "doctors"
     },
 	{
        "text": "find all doctors",
-       "intent": "doctors",
-       "entities": []
+       "intent": "doctors"
      },
 
 	{
        "text": "list all doctors",
-       "intent": "doctors",
-       "entities": []
+       "intent": "doctors"
      },
 
 	{
@@ -216,6 +226,81 @@
        "intent": "doctors",
        "entities": []
      },
+
+
+   {
+      "text": "Skin specialists",
+      "intent": "doctors",
+      "entities": [{
+            "start": 0,
+            "end": 4,
+            "value": "skin",
+            "entity": "department"
+          }]
+    },
+
+
+	{
+      "text": "show me all orthopedicians",
+      "intent": "doctors",
+      "entities": [{
+            "start": 12,
+            "end": 26,
+            "value": "orthopedicians",
+            "entity": "department"
+          }]
+    },
+
+
+
+ 
+{
+      "text": "dermatology specilaist",
+      "intent": "doctors",
+      "entities": [{
+            "start": 0,
+            "end": 11,
+            "value": "dermatology",
+            "entity": "department"
+          }]
+    },
+
+
+{
+      "text": "get all cardiologists",
+      "intent": "doctors",
+      "entities": [{
+            "start": 8,
+            "end": 21,
+            "value": "cardiologists",
+            "entity": "department"
+          }]
+    },
+
+
+{
+      "text": "get all orthopedicians",
+      "intent": "doctors",
+      "entities": [{
+            "start": 8,
+            "end": 22,
+            "value": "orthopedicians",
+            "entity": "department"
+          }]
+    },
+
+
+
+{
+      "text": "can show me all doctors",
+      "intent": "doctors",
+      "entities": []
+    },
+ {
+      "text": "can show me all doctors",
+      "intent": "doctors",
+      "entities": []
+    },
 
 	{
        "text": "get me all slots of doctor vijay",

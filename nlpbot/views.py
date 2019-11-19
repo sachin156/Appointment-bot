@@ -11,9 +11,15 @@ from itertools import groupby
 import operator
 
 import nltk
+from nltk.stem.snowball import SnowballStemmer 
+stemmer=SnowballStemmer("english")
+
 from nltk.tag.stanford import StanfordNERTagger
 from nltk.tokenize import word_tokenize
 from nltk.corpus import stopwords
+
+# import spacy
+# nlp=spacy.load('en_sm')
 
 from bot.services.slotsservice import SlotService
 from bot.services.docservice import DocService
@@ -33,84 +39,126 @@ def index(request):
 
 
 DocSer=DocService()
+SlotSer=SlotService()
 doctors=DocSer.getdoctors()
 
-def doctorschat(text):
+def doctorschat(intentval):
     # docname=getentities(ques)   department
+    # intentval is department
+    print(intentval)
     DocSer=DocService()
-    doctors=DocSer.getdoctors()
-    return doctors
+    if not intentval:
+        doctors=DocSer.getdoctors()
+        return doctors
+    else:
+        spec=stemmer.stem(intentval)
+        # print(se )
+        doctors=DocSer.getdocbydep(spec)
+        return doctors
+        # print(spec)
+    
 
 def slotschat(text):
     docname=getentities(text)
-    DocSer=DocService()
-    doctors=DocSer.getdoctors()     
-    if docname:
-        SlotSer=SlotService()
-        msg=SlotSer.docslots(docname)
-        return (msg)
+    matches=getdateandtime(text)
+    while True:
+        # get me all slots of doctor vijay on 20th November 10AM
+        print(docname,matches)
+        if docname:
+            SlotSer=SlotService()
+            msg=SlotSer.docslots(docname)
+            print("Bot:"+str(msg))
+            break
+        elif not docname:
+            print("Bot:Enter any doctor name")
+            text=getinput()
+            docname=getentities(text)
+        # elif not matches:
+        #     print("Bot:Enter date and time")
+        #     text=getinput()
+        #     matches=getdateandtime(text)
+    print("Bot:Do you want to proceed for appointment?")
+    confir=getinput()
+    if confir=="yes":
+        print("Bot:select time for the appointment")
+        matches=getinput()
+        msg=appointmentchat(str(docname)+" "+"on"+" "+str(matches))
     else:
-        return ("Select any doctor from the suggested:"+str(doctors))
+        msg="Ok,Do you want see another doctor?"
+    return (msg)
 
 def appointmentchat(text):
-    # docname=getentities(ques)
-    matches=list(datefinder.find_dates(text))
-    # print(matches)
-    if not matches:
-        # return HttpResponse("Enter date and time to make the appointment")
-        print("Bot:Enter date and time to make the appointment")
-        text=input("User:")
-        appointmentchat(text)
-    else:
-        start_time=matches[0]
-        userday=str(start_time).split(" ")[0]
-        usertime=start_time.strftime('%H:%M')
+    docname=getentities(text)
+    print(docname)
+    start_time=getdateandtime(text)
+    print(docname,start_time)
+    while True:
+        if docname and start_time:
+            # start_time=matches[0]
+            if datetime.now()>start_time:
+                print("Bot:Appointment not created,select from other timings")
+            else:
+                userday=str(start_time).split(" ")[0]
+                usertime=start_time.strftime('%H:%M')
+                appser=AppService()
+                msg=appser.bookappointment(docname,usertime,"Y",userday,"srinu",text)
+                return msg
+        elif not docname:
+            print("Bot:Enter any doctor name")
+            text=getinput()
+            docname=getentities(text)
+        elif not start_time:
+            print("Bot:Enter date and time")
+            text=getinput()
+            start_time=getdateandtime(text)      
 
-    if datetime.now()>start_time:
-        logger.exception("Exception:Enter Valid Date and Time")
-        print("Appointment not created,select from other timings")
-    if docname:
-        start_time=matches[0]
-        userday=str(start_time).split(" ")[0]
-        usertime=start_time.strftime('%H:%M')
-        appser=AppService()
-        # patient name
-        # print(docname)
-        msg=appser.bookappointment(docname,usertime,"Y",userday,"srinu",text)
-        return (msg)
-    else:
-        return ("Select any doctor from the suggested:"+str(DocSer.getdoctors()))
-    
 
+# **************************
 def getentities(text):
-    # intent=getintent(text)
-
-    tokenized_text = (word_tokenize(text.title()))
-    # ner tagging 
-    classified_text = st.tag(tokenized_text)
-
-       # # objs for service classes....
-    
-
-    doctor=""
-    docname=""
-    for tag, chunk in groupby(classified_text, lambda x:x[1]):
+    doctor_name=""
+    r=st.tag(text.title().split())
+    for tag, chunk in groupby(r, lambda x:x[1]):
         if tag== "PERSON":
             doctor=("%-12s"%tag, " ".join(w for w, t in chunk))
-            docname=doctor[1].lower()
-            return docname
+            doctor_name=doctor[1]
+    return doctor_name
+
+
+def getdateandtime(text):
+    matches=list(datefinder.find_dates(text))
+    if not matches:
+        return None
+    else:
+        return matches[0]
+
+def getinput():
+    text=input("User:")
+    return text
+
+# *****************************
+
+
 
 while True:
     # print("User:")
-    ques=input("User:")
-    intent=getintent(ques)
+    ques=getinput()
+    intent_struc=getintent(ques)
+    intent=intent_struc['intent']['name']
+    print(intent)
     if intent=="goodbye":
         print("Bye")
         break
     elif intent=="doctors":
-        response=doctorschat(ques)
+        intent_val=""
+        if intent_struc['entities']:
+            intent_val=intent_struc['entities'][0]['value']
+            response=doctorschat(intent_val)
+        else:
+            response=doctorschat(intent_val)
     elif intent=="appointment":
         response=appointmentchat(ques)
     elif intent=="slots":
         response=slotschat(ques)
+    # elif intent=="greet":
+
     print("Bot:"+str(response))

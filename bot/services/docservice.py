@@ -32,4 +32,8 @@ class DocService():
         else:
             return ""
 
+    def getdocbydep(self,depname):
+        msg=self.DocMap.getdocbydep(depname)
+        return msg
+
  

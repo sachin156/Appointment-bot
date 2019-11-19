@@ -11,11 +11,11 @@ from rasa_nlu.model import Metadata, Interpreter
 
 
 # ********training the model**********
-# train_data = load_data('rasa_dataset.json')
-# trainer = Trainer(config.load("config_spacy.yaml"))
-# trainer.train(train_data)
-# model_dir=trainer.persist('./models/',fixed_model_name='appointmentbot')
-# interpreter = Interpreter.load(model_dir)
+def train_appointmentbot():
+    train_data = load_data('rasa_dataset.json')
+    trainer = Trainer(config.load("config_spacy.yaml"))
+    trainer.train(train_data)
+    model_dir=trainer.persist('./models/',fixed_model_name='appointmentbot')
 # train_appointmentbot()
 # *************************************
 
@@ -26,5 +26,6 @@ interpreter = Interpreter.load('./models/default/appointmentbot')
 
 def getintent(text):
     intentname=interpreter.parse(text)
-    return intentname['intent']['name']
+    # print(intentname)
+    return intentname
 

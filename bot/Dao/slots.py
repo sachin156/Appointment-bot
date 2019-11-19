@@ -1,5 +1,7 @@
 from django.db import connection
 from bot.modelsdb.slotmodels import Slots
+from datetime import datetime
+# datetime object containing current date and time
 
 class SlotsDao(Slots):
 
@@ -21,7 +23,14 @@ class SlotsDao(Slots):
         return records
     
     def docslots(self,doctor_id):
+        # now = datetime.now()
+        # print("now =", now)
+        # # dd/mm/YY H:M:S
+        # dt_string = now.strftime("%Y-%m-%d")
+        # print("date", dt_string)   
         select_stmt="SELECT DISTINCT b.book_date,s.slot_time FROM slots s INNER JOIN booking_status b on b.slot_id!=s.slot_id and s.slot_id not in(SELECT slot_id FROM booking_status where doc_id=%s)"
+        # # select_stmt=""
+        # select_stmt="Select DISTINCT s.slot_time FROM slots s INNER JOIN booking_status b on b.slot_id!=s.slot_id and select b.book_date s.slot_id not in(SELECT slot_id FROM booking_status where doc_id=%s)"
         self.cursor.execute(select_stmt,(doctor_id,))
         slots=self.cursor.fetchall()
         return slots
