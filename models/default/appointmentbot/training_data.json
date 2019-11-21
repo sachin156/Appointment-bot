@@ -87,7 +87,7 @@
           {
             "start": 39,
             "end": 43,
-            "value": "dermatology",
+            "value": "skin",
             "entity": "department"
           }
         ],
@@ -131,6 +131,18 @@
       },
       {
         "intent": "doctors",
+        "text": "find all doctors"
+      },
+      {
+        "intent": "doctors",
+        "text": "find all specialists"
+      },
+      {
+        "intent": "doctors",
+        "text": "can you show me all doctors"
+      },
+      {
+        "intent": "doctors",
         "text": "get all doctors"
       },
       {
@@ -147,31 +159,15 @@
       },
       {
         "intent": "doctors",
-        "text": "list all doctors"
-      },
-      {
-        "intent": "doctors",
-        "text": "can show me all doctors"
-      },
-      {
-        "intent": "doctors",
-        "text": "get all doctors"
-      },
-      {
-        "intent": "doctors",
-        "text": "get me all doctors"
-      },
-      {
-        "intent": "doctors",
-        "text": "find all doctors"
-      },
-      {
-        "intent": "doctors",
-        "text": "list all doctors"
-      },
-      {
-        "intent": "doctors",
-        "text": "find all specialists"
+        "entities": [
+          {
+            "start": 12,
+            "end": 26,
+            "value": "dermatologists",
+            "entity": "department"
+          }
+        ],
+        "text": "get me only dermatologists"
       },
       {
         "intent": "doctors",
@@ -201,13 +197,13 @@
         "intent": "doctors",
         "entities": [
           {
-            "start": 0,
-            "end": 11,
+            "start": 7,
+            "end": 18,
             "value": "dermatology",
             "entity": "department"
           }
         ],
-        "text": "dermatology specilaist"
+        "text": "get me dermatology specilaist"
       },
       {
         "intent": "doctors",
@@ -284,14 +280,6 @@
       {
         "intent": "goodbye",
         "text": "bye"
-      },
-      {
-        "intent": "goodbye",
-        "text": "goodbye"
-      },
-      {
-        "intent": "goodbye",
-        "text": "good bye"
       },
       {
         "intent": "goodbye",

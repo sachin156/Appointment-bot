@@ -2,6 +2,7 @@ from bot.models import Doctors,Slots,BookingStatus,Patients
 from django.db import connection
 from bot.Dao.slots import SlotsDao
 from .docservice import DocService
+from datetime import datetime,date,timedelta
 
 class SlotService():
     
@@ -28,13 +29,29 @@ class SlotService():
         docid=self.DocSer.getdocbyname(docname)
         if docid=="":
             return "Select from suggested doctors"+str(self.DocSer.getdoctors())
-        slots=self.SlotMap.docslots(appdate,docid)
+        
+        year=int(appdate.split('-')[0])
+        month=int(appdate.split('-')[1])
+        date=int(appdate.split('-')[2])
+
+        date = datetime(year,month,date)
+        app_dates=[]
+        app_dates.append(appdate)
+        for i in range(2):
+            date +=timedelta(days=1)
+            app_dates.append(date.strftime("%Y-%m-%d"))
+
+        # slots=[]
+        slots=self.SlotMap.docslots(app_dates,docid)
         newslots=[]
-        # if slots: 
-        #     for slot in slots:
-        #         date_time = slot[0].strftime("%m/%d/%Y")
-        #         newslots.append([date_time,slot[1]])
+
         # print(slots)
+        index=0
+        for slotdate in slots:
+            for slot in slotdate:
+                date_time = app_dates[index]
+                newslots.append([date_time,slot])
+            index+=1           
         return newslots
 
     # def GetSlot(self,slotid):

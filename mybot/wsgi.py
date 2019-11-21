@@ -11,6 +11,11 @@ import os
 
 from django.core.wsgi import get_wsgi_application
 
+from nlpbot import views as startup
+
+startup.run()
+
+
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'mybot.settings')
 
 application = get_wsgi_application()
