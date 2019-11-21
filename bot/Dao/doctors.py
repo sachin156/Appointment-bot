@@ -25,8 +25,14 @@ class DoctorsDao(Doctors):
         select_stmt="""SELECT doc_id from doctors where doc_name=%s"""
         self.cursor.execute(select_stmt,(doc_name,))
         return self.cursor.fetchall()
-         
+    
+    def getdocbydep(self,depname):
+        select_stmt="""SELECT doc_name from doctors where specialization=%s"""
+        self.cursor.execute(select_stmt,(depname,))
+        return self.cursor.fetchall()
 
+         
+    
 
         
 

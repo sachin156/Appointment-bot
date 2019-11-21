@@ -28,7 +28,10 @@ class AppService():
         # usertime=start_time.strftime('%H:%M')
         # appser=AppService()
 
-        docid=self.DocSer.getdocbyname(docname)
+        # print(docname,usertime,userday)
+        doc_name=docname
+        # print(doc_name)
+        docid=self.DocSer.getdocbyname(doc_name)
         patid=self.PatSer.getpatientbyname(patname)
         slotid=self.SlotSer.getslots(usertime)
         # ****

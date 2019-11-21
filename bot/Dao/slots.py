@@ -1,6 +1,8 @@
 from django.db import connection
 from bot.modelsdb.slotmodels import Slots
 
+# datetime object containing current date and time
+
 class SlotsDao(Slots):
     
     def getslot(self,usertime):
@@ -12,12 +14,18 @@ class SlotsDao(Slots):
         select_stmt="SELECT count(b.status) From booking_status b,slots s Where b.slot_id=%s and b.book_date=%s and doc_id=%s"
         self.cursor.execute(select_stmt,(slotid,userday,docid))
         records=self.cursor.fetchall()
-        print(records)
         return records
-    
-    def docslots(self,doctor_id):
-        select_stmt="SELECT DISTINCT b.book_date,s.slot_time FROM slots s INNER JOIN booking_status b on b.slot_id!=s.slot_id and s.slot_id not in(SELECT slot_id FROM booking_status where doc_id=%s)"
-        self.cursor.execute(select_stmt,(doctor_id,))
-        slots=self.cursor.fetchall()
-        return slots
         
+    def docslots(self,app_dates,doctor_id):
+        avail_slots=[]
+        # print(app_dates)
+        for app_date in app_dates:
+            select_stmt="SELECT DISTINCT s.slot_time from slots s INNER JOIN booking_status b on b.slot_id!=s.slot_id and s.slot_id not in(select slot_id from booking_status where book_date=%s and doc_id=%s)"
+            self.cursor.execute(select_stmt,(app_date,doctor_id))
+            slots=self.cursor.fetchall()
+            avail_slots.append(slots)
+        # print(avail_slots)
+        return avail_slots
+
+
+

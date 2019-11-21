@@ -13,7 +13,6 @@ class AppointmentDao(Appointment):
         return self.cursor.lastrowid
     
     def delete(self,bookid):
-        print(bookid)
         delet_stmt="""DELETE from booking_status where book_id=%s"""
         msg=self.cursor.execute(delet_stmt, (bookid,))
         return msg
