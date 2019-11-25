@@ -18,6 +18,10 @@
       {
         "value": "appointment",
         "synonyms": ["Appointment", "consultation","arrangement"]
+      },
+      {
+        "value": "dermatologist",
+        "synonyms": ["skin", "dermatology","arrangement"]
       }
     ],
     "common_examples": [
@@ -188,12 +192,6 @@
        "intent": "doctors"
      },
 
-   
-	  {
-       "text": "find all doctors",
-       "intent": "doctors"
-     },
-
 	{
        "text": "list all doctors",
        "intent": "doctors"
@@ -212,6 +210,18 @@
           "start": 12,
           "end": 26,
           "value": "dermatologists",
+          "entity": "department"
+        }]
+  },
+
+
+  {
+    "text": "get me only Neurologists",
+    "intent": "doctors",
+    "entities": [{
+          "start": 12,
+          "end": 24,
+          "value": "Neurologists",
           "entity": "department"
         }]
   },
@@ -238,7 +248,7 @@
             "value": "orthopedicians",
             "entity": "department"
           }]
-    },
+  },
 
 
 
@@ -284,12 +294,6 @@
       "intent": "doctors",
       "entities": []
     },
- {
-      "text": "can show me all doctors",
-      "intent": "doctors",
-      "entities": []
-    },
-
 	{
        "text": "get me all slots of doctor vijay",
        "intent": "slots",

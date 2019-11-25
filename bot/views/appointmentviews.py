@@ -35,7 +35,7 @@ class AppointmentView(APIView):
         newtext=request.POST.get('appointtext')
         # logger.error(newtext)
         docname=request.POST.get('docname')
-        print(docname)
+        # print(docname)
         patname=request.POST.get('patname')
         matches=list(datefinder.find_dates(newtext))
         if len(matches)==0:
