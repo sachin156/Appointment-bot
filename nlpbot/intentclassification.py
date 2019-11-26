@@ -4,24 +4,19 @@ from rasa_nlu.model import Trainer
 from rasa_nlu import config
 from rasa_nlu.model import Metadata, Interpreter
 
-# from bot.services.appointmentservice import AppService
-# from bot.services.slotsservice import SlotService
-# from bot.services.docservice import DocService
-
-
 
 # ********training the model**********
 def train_appointmentbot():
-    train_data = load_data('rasa_dataset.json')
-    trainer = Trainer(config.load("config_spacy.yaml"))
+    train_data = load_data('rsafiles/rasa_dataset.json')
+    trainer = Trainer(config.load("rsafiles/config_spacy.yaml"))
     trainer.train(train_data)
-    model_dir=trainer.persist('./models/',fixed_model_name='appointmentbot')
+    model_dir=trainer.persist('./rsamodels/',fixed_model_name='appointmentbot')
 # train_appointmentbot()
 # *************************************
 
 
 
-interpreter = Interpreter.load('./models/default/appointmentbot')
+interpreter = Interpreter.load('./rsamodels/default/appointmentbot')
 # print("hello")
 
 def getintent(text):

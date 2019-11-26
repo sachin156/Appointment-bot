@@ -1,12 +1,14 @@
-# Appointment-bot
+##Appointment-bot
 
-Pickle file is generate using below code...
+Chat bot developed using rasa nlu and django framework.
 
-from apiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow
-scopes=['https://www.googleapis.com/auth/calendar']
+Below description gives a clear idea about folder structure.
 
-flow=InstalledAppFlow.from_client_secrets_file("client_secret.json",scopes=scopes)
-credentials=flow.run_console()
-import pickle
-pickle.dump(credentials,open('token.pkl','wb'))
+##Bot 
+
+The folder contains the operations related to the use case (doctor appointment).
+
+##nlpbot 
+
+In this folder all the work related intent classification and chat with user is done.
+

@@ -24,7 +24,7 @@ class SlotchatService():
     def __init__(self):
         # DocSer=DocService()
         self.SlotSer=SlotService()
-        # appchatser=AppchatService()
+        self.appchatser=AppchatService()
         # doctors=DocSer.getdoctors()
 
     def getinput(self):
@@ -33,6 +33,7 @@ class SlotchatService():
 
 # ****************************
     def slotschat(self,text):
+        counter=0
         docname=getentities(text)
         matches=getdateandtime(text)
         if not matches:
@@ -45,14 +46,16 @@ class SlotchatService():
                 msg=self.SlotSer.docslots(matches,docname)
                 print("Bot:"+str(msg))
                 break
-            elif not docname:
+            elif not docname and counter<3:
                 print("Bot:Enter any doctor name")
                 text=self.getinput()
+                counter+=1
                 docname=getentities(text)
-            # elif not matches:
-            #     print("Bot:Enter date and time")
-            #     text=getinput()
-            #     matches=getdateandtime(text)
+            
+            elif not docname and counter>=3:
+                msg="Starting Over,"
+                return msg  
+
         print("Bot:Do you want to proceed for appointment?")
         confir=self.getinput()
         if confir=="yes":

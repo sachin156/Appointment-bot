@@ -15,13 +15,13 @@ def train_appointmentbot():
     train_data = load_data('rasa_dataset.json')
     trainer = Trainer(config.load("config_spacy.yaml"))
     trainer.train(train_data)
-    model_dir=trainer.persist('./models/',fixed_model_name='appointmentbot')
+    model_dir=trainer.persist('./rsamodels/',fixed_model_name='appointmentbot')
 # train_appointmentbot()
 # *************************************
 
 
 
-interpreter = Interpreter.load('./models/default/appointmentbot')
+interpreter = Interpreter.load('./rsamodels/default/appointmentbot')
 # print("hello")
 
 def getintent(text):
