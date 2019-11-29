@@ -30,6 +30,7 @@ class SlotService():
         if docid=="":
             return "Select from suggested doctors"+str(self.DocSer.getdoctors())
         
+        print(appdate)
         year=int(appdate.split('-')[0])
         month=int(appdate.split('-')[1])
         date=int(appdate.split('-')[2])
@@ -47,10 +48,14 @@ class SlotService():
 
         # print(slots)
         index=0
+        max_slots=0
         for slotdate in slots:
             for slot in slotdate:
+                if max_slots>=10:
+                    break
                 date_time = app_dates[index]
                 newslots.append([date_time,slot])
+                max_slots+=1
             index+=1           
         return newslots
 

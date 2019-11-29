@@ -13,7 +13,7 @@ stemmer=SnowballStemmer("english")
 from bot.services.slotsservice import SlotService
 from bot.services.docservice import DocService
 from bot.services.appointmentservice import AppService
-from .intentclassification import getintent
+# from .intentclassification import getintent
 from .util import getdateandtime,getentities
 
 
@@ -42,7 +42,7 @@ class DocchatService():
         DocSer=DocService()
         if not intentval:
             doctors=DocSer.getdoctors()
-            return doctors
+            return "Can you select the doctors from:"+ str(doctors)
         else:
             # print(intentval)
             spec=stemmer.stem(intentval)

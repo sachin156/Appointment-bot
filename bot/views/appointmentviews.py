@@ -51,7 +51,7 @@ class AppointmentView(APIView):
         # print(datetime.now())
         # print(start_time)
         msg=self.AppSer.bookappointment(docname,usertime,"Y",userday,patname,newtext)
-        return HttpResponse("pend")
+        return msg
     
     
 

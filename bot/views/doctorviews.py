@@ -12,6 +12,8 @@ import jsonify
 import json
 import datefinder
 from rest_framework.views import APIView
+from rest_framework.response import Response
+
 from django.http import QueryDict
 
 logger=logging.getLogger(__name__)
@@ -40,5 +42,5 @@ class DoctorView(APIView):
     
     def delete(self,request,docname,format=None):
         msg=self.DocSer.deletedoc(docname.lower())
-        return HttpResponse(msg)
+        return  HttpResponse(msg)
 

@@ -6,8 +6,11 @@ stemmer=SnowballStemmer("english")
 from nltk.tag.stanford import StanfordNERTagger
 from nltk.corpus import stopwords
 
-st = StanfordNERTagger('/home/sachinv/Documents/stanford-ner/classifiers/english.all.3class.distsim.crf.ser.gz',
-                        '/home/sachinv/Documents/stanford-ner/stanford-ner.jar',encoding='utf-8')
+jar='rasafiles/stanford-ner.jar'
+model='rasafiles/english.all.3class.distsim.crf.ser.gz'
+
+
+st = StanfordNERTagger(model,jar,encoding='utf-8')
 
 
 def getentities(text):

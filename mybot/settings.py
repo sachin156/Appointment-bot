@@ -14,6 +14,8 @@ import os
 import sys
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+# SETTINGS_PATH = os.path.dirname(os.path.dirname(__file__))
+# TEMPLATE_DIRS = (os.path.join(BASE_DIR,  'templates'))
 # sys.path.insert(0, os.path.join(BASE_DIR, 'servicebot'))/
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -56,7 +58,8 @@ ROOT_URLCONF = 'mybot.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR,  'templates'),
+                 os.path.join(BASE_DIR,  'nlpbot')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -64,6 +67,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+
             ],
         },
     },

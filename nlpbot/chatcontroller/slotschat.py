@@ -11,7 +11,8 @@ from itertools import groupby
 from bot.services.slotsservice import SlotService
 from bot.services.docservice import DocService
 from bot.services.appointmentservice import AppService
-from .intentclassification import getintent
+
+# from .intentclassification import getintent
 from .util import getdateandtime,getentities
 from .appointmentchat import AppchatService
 
@@ -33,30 +34,28 @@ class SlotchatService():
 
 # ****************************
     def slotschat(self,text):
-        counter=0
+
         docname=getentities(text)
         matches=getdateandtime(text)
         if not matches:
             matches=date.today().strftime("%Y-%m-%d")
             # print(matches)
+        else:
+            matches=matches.strftime("%Y-%m-%d")
         while True:
-            # get me all slots of doctor vijay on 20th November 10AM
-            # print(docname,matches)
             if docname and matches:
                 msg=self.SlotSer.docslots(matches,docname)
                 print("Bot:"+str(msg))
                 break
-            elif not docname and counter<3:
-                print("Bot:Enter any doctor name")
-                text=self.getinput()
-                counter+=1
-                docname=getentities(text)
             
-            elif not docname and counter>=3:
-                msg="Starting Over,"
-                return msg  
-
-        print("Bot:Do you want to proceed for appointment?")
+            #*********
+            if not docname:
+                docname=self.appchatser.checkdocname()
+                if docname is None:
+                    return "Starting Over,"
+            #**********
+            
+        print("Bot:Do you want to proceed for appointment (yes/no)?")
         confir=self.getinput()
         if confir=="yes":
             print("Bot:select time for the appointment")
@@ -66,3 +65,16 @@ class SlotchatService():
             msg="Ok,Do you want to see another doctor?"
         return (msg)
 
+
+    def checkdocname(self):
+        counter=0
+        docname=""
+        while counter<3: 
+            if not docname:
+                print("Bot:Enter doctor name")
+                text=self.getinput()
+                counter+=1
+                docname=getentities(text)
+            else:
+                return docname
+        return None

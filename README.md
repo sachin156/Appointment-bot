@@ -1,14 +1,26 @@
-##Appointment-bot
+## Appointment-bot
 
 Chat bot developed using rasa nlu and django framework.
 
 Below description gives a clear idea about folder structure.
 
-##Bot 
+## Bot 
 
 The folder contains the operations related to the use case (doctor appointment).
 
-##nlpbot 
+## nlpbot 
 
 In this folder all the work related intent classification and chat with user is done.
+
+## rsafiles 
+
+Contains the files rasa model training 
+
+## rsamodels 
+
+Rasa models generated after training..
+
+
+
+
 
