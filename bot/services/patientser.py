@@ -29,5 +29,8 @@ class PatService():
 
     def getpatientbyname(self,patname):
         msg=self.patmap.getpatbyname(patname)
-        patid=msg[0][0]
-        return patid
+        if not msg:
+            return ""
+        else:
+            patid=msg[0][0]
+            return patid

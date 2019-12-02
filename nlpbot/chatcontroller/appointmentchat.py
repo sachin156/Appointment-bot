@@ -14,7 +14,7 @@ from bot.services.docservice import DocService
 from bot.services.appointmentservice import AppService
 
 # from .intentclassification import getintent
-from .util import getdateandtime,getentities
+from .util import getdateandtime,getentities,checkdate,checkdocname
 
 
 logger=logging.getLogger(__name__)
@@ -32,43 +32,8 @@ class AppchatService():
     def getinput(self):
         text=input("User:")
         return text
+    
 
-    def appointmentchat(self,text):
-        docname=getentities(text)
-        start_time=getdateandtime(text)    
-        print(docname,start_time)
-        while True:
-            # if start_time.weekday()==6:
-            #     print("Bot:Doctor is available only on weekdays(Mon-Sat)")
-            
-            if docname and start_time:
-                # start_time=matches[0]
-                week_day=start_time.weekday()
-                print(week_day)
-                if datetime.now()>start_time and week_day!=6:
-                    print("Bot:Appointment not created,select from other timings")
-                    text=self.getinput()
-                    start_time=getdateandtime(text)   
-                else:
-                    patname=self.patdetails()
-                    userday=str(start_time).split(" ")[0]
-                    usertime=start_time.strftime('%H:%M')
-                    msg=self.appser.bookappointment(docname,usertime,"Y",userday,patname,text)
-                    return msg
-            
-
-            #***********
-            if not docname:
-                docname=self.checkdocname()
-                if docname is None:
-                    return "Starting Over,"
-            
-            if not start_time:
-                start_time=self.checkdate()
-                if start_time is None:
-                    return "Starting Over,"
-            
-            #***********       
     def patdetails(self):
         print("Bot:Are you Registered User(yes/no)")
         text=self.getinput()
@@ -85,32 +50,41 @@ class AppchatService():
             self.patser.addpat(patname,phonenumber,"")
             return patname
 
-    
-    def checkdocname(self):
-        counter=0
-        docname=""
-        while counter<3: 
-            if not docname:
-                print("Bot:Enter doctor name")
-                text=self.getinput()
-                counter+=1
-                docname=getentities(text)
-            else:
-                return docname
-        return None
+    def appointmentchat(self,text):
+        docname=getentities(text)
+        start_time=getdateandtime(text)    
+        # print(docname,start_time)
+        while True:
+            if docname and start_time:
+                # start_time=matches[0]
+                week_day=start_time.weekday()
+                # print(week_day)
+                if datetime.now()>start_time or week_day==6:
+                    print("Bot:Appointment not created,select from other timings")
+                    text=self.getinput()
+                    start_time=getdateandtime(text)   
+                else:
+                    patname=self.patdetails()
+                    userday=str(start_time).split(" ")[0]
+                    usertime=start_time.strftime('%H:%M')
+                    msg=self.appser.bookappointment(docname,usertime,"Y",userday,patname,text)
+                    return msg
             
-    def checkdate(self):
-        counter=0
-        start_time=""
-        while counter<3: 
+
+            #***********
+            if not docname:
+                docname=checkdocname()
+                print(docname)
+                if docname is None:
+                    return "Starting Over,"
+            
             if not start_time:
-                print("Bot:Enter date and time")
-                text=self.getinput()
-                counter+=1
-                start_time=getdateandtime(text)
-            else:
-                return start_time
-        return None
+                start_time=checkdate()
+                if start_time is None:
+                    return "Starting Over,"
+            
+            #***********       
+    
 
            
 

@@ -22,13 +22,6 @@ class AppService():
         self.SlotSer=SlotService()
 
     def bookappointment(self,docname,usertime,status,userday,patname,newtext):
-        # matches=list(datefinder.find_dates(newtext))
-        # start_time=matches[0]
-        # userday=str(start_time).split(" ")[0]
-        # usertime=start_time.strftime('%H:%M')
-        # appser=AppService()
-
-        # print(docname,usertime,userday)
         doc_name=docname
         print("appointment",doc_name)
         # print(doc_name)

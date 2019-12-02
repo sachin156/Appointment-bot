@@ -16,7 +16,7 @@ def train_appointmentbot():
     trainer = Trainer(config.load("rasafiles/config_spacy.yaml"))
     trainer.train(train_data)
     trainer.persist('./rasamodels/',fixed_model_name='appointmentbot')
-train_appointmentbot()
+# train_appointmentbot()
 # *************************************
 
 

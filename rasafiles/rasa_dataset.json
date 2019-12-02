@@ -113,7 +113,7 @@
       {
         "text": "I would like to make appointment with dermatology specialist",
         "intent": "appointment",
-	"entities": [
+	      "entities": [
           {
             "start": 39,
             "end": 51,
@@ -313,6 +313,11 @@
        "text": "list all slots",
        "intent": "slots",
        "entities": []
+     },
+     {
+      "text": "Availability of doctor",
+      "intent": "slots",
+      "entities": []
      },
 
       {

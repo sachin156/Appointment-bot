@@ -13,7 +13,7 @@ from bot.services.docservice import DocService
 from bot.services.appointmentservice import AppService
 
 # from .intentclassification import getintent
-from .util import getdateandtime,getentities
+from .util import getdateandtime,getentities,checkdocname
 from .appointmentchat import AppchatService
 
 
@@ -50,7 +50,7 @@ class SlotchatService():
             
             #*********
             if not docname:
-                docname=self.appchatser.checkdocname()
+                docname=checkdocname()
                 if docname is None:
                     return "Starting Over,"
             #**********
@@ -66,15 +66,3 @@ class SlotchatService():
         return (msg)
 
 
-    def checkdocname(self):
-        counter=0
-        docname=""
-        while counter<3: 
-            if not docname:
-                print("Bot:Enter doctor name")
-                text=self.getinput()
-                counter+=1
-                docname=getentities(text)
-            else:
-                return docname
-        return None

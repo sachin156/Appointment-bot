@@ -28,23 +28,12 @@ class DocchatService():
         self.SlotSer=SlotService()
         self.doctors=self.DocSer.getdoctors()
 
-# # **************************
-#     def getinput(self):
-#         text=input("User:")
-#         return text
-
-
-
     def doctorschat(self,intentval):
-        # docname=getentities(ques)   department
-        # intentval is department
-        # print(intentval)
         DocSer=DocService()
         if not intentval:
             doctors=DocSer.getdoctors()
             return "Can you select the doctors from:"+ str(doctors)
         else:
-            # print(intentval)
             spec=stemmer.stem(intentval)
             # print(se )
             doctors=DocSer.getdocbydep(spec)

@@ -30,7 +30,7 @@ class SlotService():
         if docid=="":
             return "Select from suggested doctors"+str(self.DocSer.getdoctors())
         
-        print(appdate)
+        # print(appdate)
         year=int(appdate.split('-')[0])
         month=int(appdate.split('-')[1])
         date=int(appdate.split('-')[2])

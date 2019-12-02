@@ -262,6 +262,10 @@
         "text": "list all slots"
       },
       {
+        "intent": "slots",
+        "text": "Availability of doctor"
+      },
+      {
         "intent": "goodbye",
         "text": "bye"
       },

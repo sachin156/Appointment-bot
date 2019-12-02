@@ -11,7 +11,7 @@ from nlpbot.chatcontroller.slotschat import SlotchatService
 from rasafiles.intentclassification import getintent
 from rest_framework.views import APIView
 from rest_framework.response import Response
-
+from nlpbot.chatcontroller.util import getentities
 
 logger=logging.getLogger(__name__)
 
@@ -32,7 +32,6 @@ class NlpView(APIView):
         text=input("User:")
         return text
 
-
     def slot(self,ques):
         response=self.Slotchat.slotschat(ques)
         return response
@@ -45,6 +44,11 @@ class NlpView(APIView):
             response=self.Docchat.doctorschat(intent_val)
         else:
             response=self.Docchat.doctorschat(intent_val)
+        return response
+
+    def doctorsug(self):
+        intent_val=""
+        response=self.Docchat.doctorschat(intent_val)
         return response
     
     def appointment(self,ques):
@@ -68,15 +72,21 @@ class NlpView(APIView):
             "doctors": self.doctor,
             "appointment":self.appointment,
             "greet":self.greet,
-            "affirm":self.affirm
+            "affirm":self.affirm,
+            "doctorsug":self.doctorsug
             }
             ques=self.getinput()
             intent_struc=getintent(ques)
-            intent=intent_struc['intent']['name']
-
+            intent=intent_struc['intent']['name'] 
+            
+            randname=getentities(ques)
+            print(intent)
             if intent=="goodbye":
                 print("Bye")
                 break
+            elif len(ques.split())<=2 and randname:
+                func = switcher.get("doctorsug", "nothing")
+                resp=func()
             else:
                 if intent=="doctors":
                     ques=intent_struc
